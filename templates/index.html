@@ -162,8 +162,8 @@
               <div class="card mb-4 text-white bg-primary p-2">
                 <div class="card-body pb-0 d-flex justify-content-between align-items-start">
                   <div>
-                    <div class="fs-4 fw-semibold">26K <span class="fs-6 fw-normal"></div>
-                    <div>Users</div>
+                    <div class="fs-4 fw-semibold">{{clients}} <span class="fs-6 fw-normal"></div>
+                    <div>Clients</div>
                   </div>
                 </div>              
               </div>
@@ -173,7 +173,7 @@
               <div class="card mb-4 text-white bg-info p-2">
                 <div class="card-body pb-0 d-flex justify-content-between align-items-start">
                   <div>
-                    <div class="fs-4 fw-semibold">12450 </div>
+                    <div class="fs-4 fw-semibold">{{sess}} </div>
                     <div>Sessions</div>
                   </div>
                
@@ -186,7 +186,7 @@
               <div class="card mb-4 text-white bg-warning p-2">
                 <div class="card-body pb-0 d-flex justify-content-between align-items-start">
                   <div>
-                    <div class="fs-4 fw-semibold">950</div>
+                    <div class="fs-4 fw-semibold">{{act_voucher}}</div>
                     <div>Active Vouchers</div>
                   </div>
                  
@@ -199,8 +199,8 @@
               <div class="card mb-4 text-white bg-danger p-2">
                 <div class="card-body pb-0 d-flex justify-content-between align-items-start">
                   <div>
-                    <div class="fs-4 fw-semibold">1000 </div>
-                    <div>Total Users</div>
+                    <div class="fs-4 fw-semibold">{{vouchers}} </div>
+                    <div>Total Vouchers</div>
                   </div>
                  
                 </div>
@@ -218,8 +218,8 @@
                   <div class="small text-medium-emphasis" id="todays-date"></div>
                 </div>       
               </div>
-              <div class="c-chart-wrapper" style="height:300px;margin-top:40px;">
-                <canvas class="chart" id="main-chart" height="300"></canvas>
+              <div class="c-chart-wrapper" style="height:300px;margin-top:40px; ">
+                <canvas class="chart " id="main-chart" width="1200" height="350"></canvas>
               </div>
             </div>
         
@@ -242,6 +242,10 @@
     <script src="vendors/chart.js/js/chart.min.js"></script>
     <script src="vendors/@coreui/chartjs/js/coreui-chartjs.js"></script>
     <script src="vendors/@coreui/utils/js/coreui-utils.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/luxon@2.4.0/build/global/luxon.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-luxon@1.1.0/dist/chartjs-adapter-luxon.min.js"></script>
+    <Script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-streaming@2.0.0/dist/chartjs-plugin-streaming.min.js"></Script>
     <script src="js/main.js"></script>
     <script>
     </script>

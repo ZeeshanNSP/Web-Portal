@@ -9,7 +9,8 @@ import os
 import pymongo
 from flask import Flask, render_template,redirect,request,jsonify,session,abort,send_from_directory
 from flask_cors import CORS
-
+import random as r
+from numerize import numerize
 
 app = Flask(__name__)
 CORS(app)
@@ -42,7 +43,14 @@ def currentUser():
         u = session["user"]
         return USERS[u]  
 
-#routes for the web portal    
+#routes for the web portal   
+# 
+#  
+@app.route("/getBandwidth")
+def getBd():
+    tx = r.randint(9,10000)
+    rx = r.randint(9,10000)
+    return {"tx":tx,"rx":rx}
 @app.route("/logout",methods = ["GET"])
 def Logout():
     session.pop("user")
@@ -62,7 +70,7 @@ def profile():
 def index():
     if request.method == "GET":
         if sessionCheck():
-            return render_template("index.html",title=TITLE)
+            return render_template("index.html",title=TITLE,clients = numerize.numerize(50000),sess=numerize.numerize(1024),act_voucher=numerize.numerize(5200),vouchers=numerize.numerize(6000))
         else:
             return render_template("login.html",title = TITLE)
     if request.method == "POST":
