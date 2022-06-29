@@ -66,6 +66,9 @@
 *::before,
 *::after {
   box-sizing: border-box;
+  user-select: none;
+  user-zoom: none;
+  transition:  all 0.3s ease-in-out;
 }
 
 @media (prefers-reduced-motion: no-preference) {
@@ -7896,7 +7899,8 @@ html:not([dir=rtl]) .sidebar-close {
   }
 }
 .sidebar-nav .nav-link.active {
-  color: var(--cui-sidebar-nav-link-active-color, rgba(255, 255, 255, 0.87));
+  color:orange;
+  font-weight: bolder;
   background: var(--cui-sidebar-nav-link-active-bg, rgba(255, 255, 255, 0.05));
 }
 .sidebar-nav .nav-link.active .nav-icon {

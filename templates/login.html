@@ -1,11 +1,5 @@
 <!DOCTYPE html>
-<!--
-* CoreUI - Free Bootstrap Admin Template
-* @version v4.1.1
-* @link https://coreui.io
-* Copyright (c) 2022 creativeLabs Łukasz Holeczek
-* Licensed under MIT (https://coreui.io/license)
--->
+
 <html lang="en">
   <head>
     <base href="./">
@@ -15,7 +9,8 @@
     <meta name="description" content="CoreUI - Open Source Bootstrap Admin Template">
     <meta name="author" content="Łukasz Holeczek">
     <meta name="keyword" content="Bootstrap,Admin,Template,Open,Source,jQuery,CSS,HTML,RWD,Dashboard">
-    <title>CoreUI Free Bootstrap Admin Template</title>
+    <title>Login - {{title}}</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js" integrity="sha512-894YE6QWD5I59HgZOGReFYm4dnWc1Qt5NtvYSaNcOP+u1T9qYdvdihz0PPSiiqn/+/3e7Jo4EaG7TubfWGUrMQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     <link rel="apple-touch-icon" sizes="57x57" href="assets/favicon/apple-icon-57x57.png">
     <link rel="apple-touch-icon" sizes="60x60" href="assets/favicon/apple-icon-60x60.png">
     <link rel="apple-touch-icon" sizes="72x72" href="assets/favicon/apple-icon-72x72.png">
@@ -55,46 +50,56 @@
       // Bootstrap ID
       gtag('config', 'UA-118965717-5');
     </script>
-  </head>
+<style>
+  #log001{
+    z-index: 5;
+  }
+  #log001:hover{
+
+  }
+</style>  
+</head>
+  
   <body>
+
+
+
+
+
     <div class="bg-light min-vh-100 d-flex flex-row align-items-center">
       <div class="container">
         <div class="row justify-content-center">
-          <div class="col-lg-8">
-            <div class="card-group d-block d-md-flex row">
-              <div class="card col-md-7 p-4 mb-0">
-                <div class="card-body">
-                  <h1>Login</h1>
-                  <p class="text-medium-emphasis">Sign In to your account</p>
-                  <div class="input-group mb-3"><span class="input-group-text">
-                      <svg class="icon">
-                        <use xlink:href="vendors/@coreui/icons/svg/free.svg#cil-user"></use>
-                      </svg></span>
-                    <input class="form-control" type="text" placeholder="Username">
-                  </div>
-                  <div class="input-group mb-4"><span class="input-group-text">
-                      <svg class="icon">
-                        <use xlink:href="vendors/@coreui/icons/svg/free.svg#cil-lock-locked"></use>
-                      </svg></span>
-                    <input class="form-control" type="password" placeholder="Password">
-                  </div>
-                  <div class="row">
-                    <div class="col-6">
-                      <button class="btn btn-primary px-4" type="button">Login</button>
-                    </div>
-                    <div class="col-6 text-end">
-                      <button class="btn btn-link px-0" type="button">Forgot password?</button>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div class="card col-md-5 text-white bg-primary py-5">
+          <div class="col-lg-8 shadow-lg"  id="log001">
+            <div class="card-group d-block d-md-flex row ">
+              
+              <div class="card col-md-5 text-white bg-white py-5">
                 <div class="card-body text-center">
                   <div>
-                    <h2>Sign up</h2>
-                    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
-                    <button class="btn btn-lg btn-outline-light mt-3" type="button">Register Now!</button>
+                    <img src="/assets/img/nsp-logo-full.jpeg" style="width: 100%;">
+                </div>
+              </div>
+            </div>
+            <div class="card col-md-7 p-4 mb-0">
+              <div class="card-body">
+                <h1>Login</h1>
+                <p class="text-medium-emphasis">Sign In to your account</p>
+                <div class="input-group mb-3"><span class="input-group-text">
+                    <svg class="icon">
+                      <use xlink:href="vendors/@coreui/icons/svg/free.svg#cil-user"></use>
+                    </svg></span>
+                  <input class="form-control" type="text" id="username" placeholder="Username">
+                </div>
+                <div class="input-group mb-4"><span class="input-group-text">
+                    <svg class="icon">
+                      <use xlink:href="vendors/@coreui/icons/svg/free.svg#cil-lock-locked"></use>
+                    </svg></span>
+                  <input class="form-control" type="password" id="password" placeholder="Password">
+                </div>
+                <div class="row">
+                  <div class="col">
+                    <button class="btn btn-primary px-4 float-end" type="button" onclick="handleLogin()">Login</button>
                   </div>
+           
                 </div>
               </div>
             </div>
@@ -102,10 +107,68 @@
         </div>
       </div>
     </div>
+
+
+<!--TEST-->
+
+<div class="position-fixed bottom-0 end-0 p-3 " style="z-index: 11">
+  <div id="liveToast" class="toast " role="alert" aria-live="assertive" aria-atomic="true">
+    <div class="toast-header">
+      <img src="/assets/img/nsp-logo-full.jpeg" style="width:40px" class="rounded me-2">
+      <strong class="me-auto" id="title"></strong>
+      <button type="button" class="btn-close" data-coreui-dismiss="toast" aria-label="Close"></button>
+    </div>
+    <div class="toast-body" id="message">
+    </div>
+  </div>
+</div>
+<!--END-->
+
+
     <!-- CoreUI and necessary plugins-->
     <script src="vendors/@coreui/coreui/js/coreui.bundle.min.js"></script>
     <script src="vendors/simplebar/js/simplebar.min.js"></script>
     <script>
+ const toastLiveExample = document.getElementById('liveToast');
+ const toastTitle  = document.getElementById("title");
+ const toastMessage  = document.getElementById("message");
+
+ const validateString = (s)=>{
+  if(s.trim().length == 0)
+    return false;
+  return true;
+ }
+ const handleLogin = ()=>{
+    let user = document.getElementById("username").value.trim();
+    let password = document.getElementById("password").value.trim();
+    if(validateString(user) && validateString(password)){
+      let obj = {
+        "user":user,
+        "password":password
+      }
+      $.post("./",obj,function(res){
+        showAlert("Information",res)
+        if (res.includes("Logging")){
+         
+          setTimeout(function(){
+            window.location.reload();
+          },1000)
+        }
+      })
+    } 
+       else{
+        showAlert("Warning","Please Enter Credentials");
+       }
+   }
+
+const showAlert = (title,message)=>{
+    toastTitle.innerText = title;
+    toastMessage.innerText = message;
+    var toast = new coreui.Toast(toastLiveExample)
+    toast.show()
+}
+
+
     </script>
 
   </body>
