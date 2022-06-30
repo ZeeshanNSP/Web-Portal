@@ -1,19 +1,33 @@
 from ast import Load
 import json
+from msilib.schema import RemoveFile
 from re import L
 from socket import timeout
 import sys
 import time
 from datetime import datetime
 import os
+from turtle import title
 import pymongo
 from flask import Flask, render_template,redirect,request,jsonify,session,abort,send_from_directory
 from flask_cors import CORS
 import random as r
 from numerize import numerize
+from rg import ReceiptGenerator
+import string
+
+
 
 app = Flask(__name__)
 CORS(app)
+
+#database connection and collections
+DBURL = "mongodb+srv://testUser:testUser@nv9-testing.9azuqdw.mongodb.net/?retryWrites=true&w=majority"
+myclient = pymongo.MongoClient(DBURL)
+mydb = myclient["NV9-Testing"]
+users = mydb["users"]
+transactions = mydb["transactions"]
+logs = mydb["log"]
 
 #configuration variables
 app.secret_key = "53C437"
@@ -25,6 +39,11 @@ def sessionCheck():
         return True
     else:
         return False
+def getCurrentTimeStamp():
+    from datetime import date
+    now = datetime.now()
+    d1 =  now.strftime("%d/%m/%Y %H:%M:%S")
+    return str(d1)
 def LoadUsers():
     f = open("cred.json","r")
     global USERS
@@ -36,6 +55,12 @@ def updateCred():
     f = open("cred.json","w")
     f.write(json.dumps(USERS))
     f.close()
+def getTransactions(query={}):
+    r = transactions.find(query)
+    res = []
+    for i in r:
+        res.append(i)
+    return res
 
 
 def currentUser():
@@ -45,7 +70,41 @@ def currentUser():
 
 #routes for the web portal   
 # 
+# 
+# 
 #  
+
+@app.errorhandler(404) 
+# inbuilt function which takes error as parameter
+def not_found(e):
+  return render_template("404.html")
+
+@app.route("/search-transactions",methods =["GET"])
+def searchTransaction():
+    return redirect("/all-transactions")
+
+@app.route("/transaction/<id>",methods=["GET"])
+def transactionDetail(id):
+    if sessionCheck():
+        t = getTransactions({"TID":{"$eq":id}})[0]
+        k = list(t.keys())
+        k = k[1:]
+        txt = {}
+        for i in k:
+            j = i.replace("_"," ")
+            txt[i] = string.capwords(j)
+        return render_template("transactionDetail.html",title=TITLE,user = currentUser(),noti = None,transaction = t,keys = k,text = txt)
+    else:
+        return redirect("/")
+@app.route("/reciept/<id>",methods=["GET"])
+def recieptDetail(id):
+    if sessionCheck():
+        t = getTransactions({"receipt_id":{"$eq":id}})[0]
+        g = ReceiptGenerator(t["receipt_id"],t["TID"],t["date"],t["time"],t["service"],t["phone"],t["total_payment"],t["pending_amount"])
+        g.save_output()
+        return render_template("recieptDetail.html",title=TITLE,user = currentUser(),noti = None,transaction = t)
+    else:
+        return redirect("/")
 @app.route("/getBandwidth")
 def getBd():
     tx = r.randint(9,10000)
@@ -54,8 +113,22 @@ def getBd():
 @app.route("/logout",methods = ["GET"])
 def Logout():
     session.pop("user")
-    return redirect("/")     
+    return redirect("/")   
 
+@app.route("/pending-transactions",methods=["GET"])
+def pendingTransactions():
+    if sessionCheck():
+        trans = getTransactions({"pending_amount":{"$gt":"0"}})
+        return render_template("pendingTransactions.html",title=TITLE,user = currentUser(),noti = None,transactions = trans)
+    else:
+        return redirect("/")  
+@app.route("/all-transactions",methods=["GET"])
+def allTransactions():
+    if sessionCheck():
+        trans = getTransactions()
+        return render_template("allTransactions.html",title=TITLE,user = currentUser(),noti = None,transactions = trans)
+    else:
+        return redirect("/")
 
 @app.route("/profile",methods=["GET","POST"])
 def profile():
@@ -79,6 +152,9 @@ def index():
         if user in USERS:
             if USERS[user]["password"] == pswd:
                 session["user"] = user
+                USERS[user]["last_login"] = getCurrentTimeStamp()
+                updateCred()
+                LoadUsers()
                 return "Logging you In"
             else:
                 return "Invalid Credentials"

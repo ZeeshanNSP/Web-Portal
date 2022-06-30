@@ -9,8 +9,10 @@
     <meta name="description" content="CoreUI - Open Source Bootstrap Admin Template">
     <meta name="author" content="Łukasz Holeczek">
     <meta name="keyword" content="Bootstrap,Admin,Template,Open,Source,jQuery,CSS,HTML,RWD,Dashboard">
-    <title>Dashboard - {{title}}</title>
+    <title>Transactions - {{title}}</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js" integrity="sha512-894YE6QWD5I59HgZOGReFYm4dnWc1Qt5NtvYSaNcOP+u1T9qYdvdihz0PPSiiqn/+/3e7Jo4EaG7TubfWGUrMQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.12.1/css/jquery.dataTables.min.css">
+    <script src="https://cdn.datatables.net/1.12.1/js/jquery.dataTables.min.js"></script>
     <link rel="apple-touch-icon" sizes="57x57" href="assets/favicon/apple-icon-57x57.png">
     <link rel="apple-touch-icon" sizes="60x60" href="assets/favicon/apple-icon-60x60.png">
     <link rel="apple-touch-icon" sizes="72x72" href="assets/favicon/apple-icon-72x72.png">
@@ -82,13 +84,13 @@
         </ul>
         
       </li>
-      <li class="nav-group"><a class="nav-link nav-group-toggle" href="#">
+      <li class="nav-group"><a class="nav-link nav-group-toggle active" href="#">
         <svg class="nav-icon">
           <use xlink:href="vendors/@coreui/icons/svg/free.svg#cil-cash"></use>
         </svg> Transactions</a>
       <ul class="nav-group-items">
-        <li class="nav-item"><a class="nav-link" href="./all-transactions"><span class="nav-icon"></span>All Transactions</a></li>
-        <li class="nav-item"><a class="nav-link" href="./pending-transactions"><span class="nav-icon"></span>Pending Transactions</a></li>
+        <li class="nav-item"><a class="nav-link " href="./all-transactions"><span class="nav-icon"></span>All Transactions</a></li>
+        <li class="nav-item"><a class="nav-link active" href="./pending-transactions"><span class="nav-icon"></span>Pending Transactions</a></li>
         <li class="nav-item"><a class="nav-link" href="./site-transactions"><span class="nav-icon"></span>Site Wise Transaction</a></li>
         <li class="nav-item"><a class="nav-link" href="./search-transactions"><span class="nav-icon"></span>Search Transactions</a></li>
       </ul>
@@ -105,7 +107,7 @@
       </ul>
       <button class="sidebar-toggler" type="button" data-coreui-toggle="unfoldable"></button>
     </div>
-    <div class="wrapper d-flex flex-column min-vh-100 bg-light">
+    <div class="wrapper d-flex flex-column min-vh-100 bg-white">
       <header class="header header-sticky mb-4">
         <div class="container-fluid">
           <button class="header-toggler px-md-0 me-md-3" type="button" onclick="coreui.Sidebar.getInstance(document.querySelector('#sidebar')).toggle()">
@@ -119,15 +121,12 @@
             <li class="nav-item"><a class="nav-link" href="./">Dashboard</a></li>
             <li class="nav-item"><a class="nav-link" href="./clients">Users</a></li>
           </ul>
-          <ul class="header-nav ms-auto">
-            <li class="nav-itme">
-              <svg class="icon me-2">
-                <use xlink:href="vendors/@coreui/icons/svg/free.svg#cil-clock"></use>
-              </svg>
-              <span id="dt"></span>
-            </li>
-
-          </ul>
+          <ul class="header-nav ms-auto"> <li class="nav-itme">
+            <svg class="icon me-2">
+              <use xlink:href="vendors/@coreui/icons/svg/free.svg#cil-clock"></use>
+            </svg>
+            <span id="dt"></span>
+          </li></ul>
           <ul class="header-nav ms-3">
             <li class="nav-item dropdown"><a class="nav-link py-0" data-coreui-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
                 <div class="avatar avatar-md">
@@ -156,82 +155,62 @@
           <nav aria-label="breadcrumb">
             <ol class="breadcrumb my-0 ms-2">
               <li class="breadcrumb-item active">
-                <!-- if breadcrumb is single--><span>Dashboard</span>
+                <!-- if breadcrumb is single--><span>Transactions</span>
               </li>
           
             </ol>
           </nav>
         </div>
       </header>
-      <div class="body flex-grow-1 px-3">
-        <div class="container-lg">
-          <div class="row">
-            <div class="col-sm-6 col-lg-3">
-              <div class="card mb-4 text-white bg-primary p-2">
-                <div class="card-body pb-0 d-flex justify-content-between align-items-start">
-                  <div>
-                    <div class="fs-4 fw-semibold">{{clients}} <span class="fs-6 fw-normal"></div>
-                    <div>Clients</div>
-                  </div>
-                </div>              
-              </div>
-            </div>
-            <!-- /.col-->
-            <div class="col-sm-6 col-lg-3">
-              <div class="card mb-4 text-white bg-info p-2">
-                <div class="card-body pb-0 d-flex justify-content-between align-items-start">
-                  <div>
-                    <div class="fs-4 fw-semibold">{{sess}} </div>
-                    <div>Sessions</div>
-                  </div>
-               
-                </div>
-                
-              </div>
-            </div>
-            <!-- /.col-->
-            <div class="col-sm-6 col-lg-3">
-              <div class="card mb-4 text-white bg-warning p-2">
-                <div class="card-body pb-0 d-flex justify-content-between align-items-start">
-                  <div>
-                    <div class="fs-4 fw-semibold">{{act_voucher}}</div>
-                    <div>Active Vouchers</div>
-                  </div>
-                 
-                </div>
-               
-              </div>
-            </div>
-            <!-- /.col-->
-            <div class="col-sm-6 col-lg-3">
-              <div class="card mb-4 text-white bg-danger p-2">
-                <div class="card-body pb-0 d-flex justify-content-between align-items-start">
-                  <div>
-                    <div class="fs-4 fw-semibold">{{vouchers}} </div>
-                    <div>Total Vouchers</div>
-                  </div>
-                 
-                </div>
-               
-              </div>
-            </div>
-            <!-- /.col-->
-          </div>
+      <div class="body flex-grow-1 px-3 bg-white">
+        <div class="container-lg bg-white">
+      
           <!-- /.row-->
-          <div class="card mb-4">
-            <div class="card-body">
-              <div class="d-flex justify-content-between">
-                <div>
-                  <h4 class="card-title mb-0">Live Traffic</h4>
-                  <div class="small text-medium-emphasis" id="todays-date"></div>
-                </div>       
-              </div>
-              <div class="c-chart-wrapper" style="max-height:300px;height:300px;margin-top:40px; ">
-                <canvas class="chart " id="main-chart" style="width:100%;max-height:40vh"></canvas>
-              </div>
+            <div class="row ">
+                <table id="tb" class="display  cell-border hover  stripe" >
+                    <thead  class="text-center">
+                        <tr  class="text-center">
+                            <th class="text-center">TID</th>
+                            <th class="text-center">Reciept #</th>
+                            <th class="text-center">Date</th>
+                            <th class="text-center">Time</th>
+                            <th class="text-center">Service</th>
+                            <th class="text-center">Phone</th>
+                            <th class="text-center">Pending (AED)</th>
+                            <th class="text-center">Total (AED)</th>
+                            <th class="text-center">Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                            {%for t in transactions%}
+                            <tr>
+                                <td class="text-center fw-bold"><a class="text-info" href="./transaction/{{t['TID']}}">{{t['TID']}}</a></td>
+                                <td class="text-center fw-bold"><a class="text-success" href="./reciept/{{t['receipt_id']}}">{{t['receipt_id']}}</a></td>
+                                <td class="text-center fw-bold">{{t['date']}}</td>
+                                <td class="text-center fw-bold">{{t['time']}}</td>
+                                <td class="text-center fw-bold">{{t['service']}}</td>
+                                <td class="text-center fw-bold"><a class="text-warning" href="tel:{{t['phone']}}">{{t['phone']}}</a></td>
+                                <td class="text-center fw-bold">{{t['pending_amount']}}</td>
+                                <td class="text-center fw-bold">{{t['total_payment']}}</td>
+                                <td class="text-center fw-bold">N/A</td>
+                            </tr>
+                            {%endfor%}
+                    </tbody>
+                    <tfoot  class="text-center">
+                        <tr  class="text-center">
+                            <th class="text-center">TID</th>
+                            <th class="text-center">Reciept #</th>
+                            <th class="text-center">Date</th>
+                            <th class="text-center">Time</th>
+                            <th class="text-center">Service</th>
+                            <th class="text-center">Phone</th>
+                            <th class="text-center">Pending (AED)</th>
+                            <th class="text-center">Total (AED)</th>
+                            <th class="text-center">Action</th>
+                        </tr>
+                    </tfoot>
+                </table>
             </div>
-        
-          </div>
           <!-- /.card.mb-4-->
         
           <!-- /.row-->
@@ -256,7 +235,13 @@
     <Script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-streaming@2.0.0/dist/chartjs-plugin-streaming.min.js"></Script>
     <script src="js/main.js"></script>
     <script>
-      
+        $(document).ready(function(){
+            $("#tb").DataTable({
+                processing: true,
+       
+        scrollX: true,
+    })
+        })
     </script>
 
   </body>

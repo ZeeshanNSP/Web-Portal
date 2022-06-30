@@ -8,7 +8,7 @@
  */
 // Disable the on-canvas tooltip
 
-
+const DEBUG = true;
 const random = (min, max) => // eslint-disable-next-line no-mixed-operators
 Math.floor(Math.random() * (max - min + 1) + min); // eslint-disable-next-line no-unused-vars
 
@@ -72,7 +72,16 @@ var config={
   }
 }
 
+if(!DEBUG)
+  document.addEventListener('contextmenu', event => event.preventDefault());
+
 const myLineChart = new Chart(document.getElementById("main-chart"),config);
 
 
+
+const dt = document.getElementById("dt")
+setInterval(function(){
+  t = new Date().toLocaleString()
+  dt.innerText = t
+},1000)
 
