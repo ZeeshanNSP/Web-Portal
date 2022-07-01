@@ -1,0 +1,17 @@
+[{
+  "_id": {
+    "$oid": "62bd99867981fa81686c37d1"
+  },
+  "ID": "1213",
+  "name": "David",
+  "phone": "978397282",
+  "mac_address": "AB:4f:5h:j3"
+},{
+  "_id": {
+    "$oid": "62bd99bc7981fa81686c37d2"
+  },
+  "ID": "1213",
+  "name": "David",
+  "phone": "978397282",
+  "mac_address": "AB:32:54:C3"
+}]
