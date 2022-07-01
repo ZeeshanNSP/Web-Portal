@@ -59,6 +59,11 @@ def getTerminals(query={}):
         res.append(i)
     return res
 
+def getSites():
+    return []
+def getSiteById(id):
+    return {"code":id,"name":id,"address":id}
+
 def updateCred():
     f = open("cred.json","w")
     f.write(json.dumps(USERS))
@@ -125,7 +130,20 @@ def terminalDetail(id):
             return redirect("/terminal/"+id)
     else:
         return redirect("/")
-
+@app.route("/site/<id>",methods=["GET","POST"])
+def siteDetail(id):
+    if sessionCheck():
+        s = getSiteById(id)
+        return render_template("/siteDetail.html",title=TITLE,user=currentUser(),noti=None,site = s)
+    else:
+        return redirect("/")
+@app.route("/sites",methods=["GET"])
+def allSites():
+    if sessionCheck():
+        s = getSites()
+        return render_template("sites.html",title=TITLE,user = currentUser(),noti=None,sites=s)
+    else:
+        return redirect("/")
 @app.route("/terminals",methods=["GET"])
 def allTerminals():
     if sessionCheck():
