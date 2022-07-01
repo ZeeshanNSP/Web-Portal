@@ -18,6 +18,7 @@ h11==0.13.0
 itsdangerous==2.1.2
 Jinja2==3.1.2
 MarkupSafe==2.1.1
+numerize==0.12
 -e git+https://github.com/ZeeshanNSP/nv9biller.git@690a56c3dc361be80ba6fff79438be0f899879d2#egg=nv9biller
 odfpy==1.4.1
 Pillow==9.1.1
