@@ -42,8 +42,8 @@ def _combine_all_images_vertically(images):
     return result
 
 
-class ReceiptGenerator():
-    def __init__(self,rid,tid,dt,tm,ser,ph,tt,pd, size=None):
+class VoucherGenerator():
+    def __init__(self,rid,tid,dt,tm,ser,pin,plan, size=None):
         self.header = None
         self.body = None
         self.footer = None
@@ -54,9 +54,8 @@ class ReceiptGenerator():
         self.date =dt
         self.time = tm
         self.service = ser
-        self.phone = ph
-        self.total = tt
-        self.pen = pd
+        self.plan =plan
+        self.pen = pin
 
 
         self.image_size = size if size else (320, 480)
@@ -79,9 +78,8 @@ class ReceiptGenerator():
     
     def generate_header(self):
         header_text_data = [
-            'JWP IT Solutions',
+            'JWP IT SOLTUTIONS',
             'Non Stop Payments Providers LLC',
-            'Office No 407, ASMAWI Building, DIP, Dubai, UAE',
             'Receipt: '+self.reciptId,
             'TID: '+self.tid,
             'Date: '+self.date,
@@ -89,15 +87,15 @@ class ReceiptGenerator():
         ]
 
         image1 = _combine_all_images_vertically([
-            self._text_image(header_text_data[0], font_size=14, size=(320, 0)),
-            self._text_image(header_text_data[1], font_size=10, size=(320, 0))
+            self._text_image(header_text_data[0], font_size=18, size=(320, 0)),
+            self._text_image(header_text_data[1], font_size=13, size=(320, 0))
          
         ]
         )
         self.receipt_text_data += header_text_data[:2]
         image3 = _combine_all_images_horizantally([
-            self._text_image(header_text_data[2], font_size=11, size=(160, 0)),
-            self._text_image(header_text_data[3], font_size=11, size=(160, 0))
+            self._text_image(header_text_data[2], font_size=11, size=(140, 0)),
+            self._text_image(header_text_data[3], font_size=11, size=(180, 0))
         ])
         self.receipt_text_data.append(header_text_data[2] + ' ' + header_text_data[3])
 
@@ -113,10 +111,9 @@ class ReceiptGenerator():
       
 
         body_text_data = [
-            ('Service :'+self.service,''),
-            ('Mobile : '+self.phone,''),
-            ('Total Amount : AED '+self.total,''),
-            ('Pending Amount : AED '+self.pen,''),
+            ('Plan : '+self.plan,''),
+            ('Site : '+self.service,'')
+           
         ]
 
         bag = []
@@ -130,6 +127,15 @@ class ReceiptGenerator():
             bag.append(_image_line_item)
             self.receipt_text_data.append('{} {}'.format(*each_line))
 
+        body_text_data = [ ('            '+self.pen,'')]
+        for each_line in body_text_data:
+            _image_line_item = _combine_all_images_horizantally([
+                self._text_image(each_line[0], font_size=18, size=(320, 0)),
+                self._text_image(each_line[1], font_size=18, size=(0, 0)),
+             
+            ])
+            bag.append(_image_line_item)
+
         image3 = _combine_all_images_vertically(bag)
 
         self.body = image3
@@ -138,7 +144,7 @@ class ReceiptGenerator():
         footer_text_data = [
             ('Service provider\'s support: 0900 787601'),
             ('NonStop Payments Providers Support: 0900 78601'),
-            ('Dealers Support: 090078601'),
+            ('              Dealers Support: 090078601'),
             ('Whatsapp 090078601 Working Hours : 09:00 - 22:00'),
             ('keep the reciept until the payment is confirmed!'),
 
@@ -172,11 +178,8 @@ class ReceiptGenerator():
                 self.image_whitespace_sep,
             ]
         )
-        self.final_output_image.save('../assets/reciept/voucher.png')
+        self.final_output_image.save('./assets/reciept/voucher.png')
         print(self.receipt_text_data)
 
 
-if __name__ == '__main__':
-    #rid,tid,dt,tm,ser,ph,tt,pd,
-    t = ReceiptGenerator("abc423a","23535464564","22/06/22","11:34 Pm","JWP","2354645","240","40")
-    t.save_output()
+

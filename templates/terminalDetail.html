@@ -2,14 +2,14 @@
 
 <html lang="en">
   <head>
-    <base href="./">
+    <base href="/">
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
     <meta name="description" content="CoreUI - Open Source Bootstrap Admin Template">
     <meta name="author" content="Łukasz Holeczek">
     <meta name="keyword" content="Bootstrap,Admin,Template,Open,Source,jQuery,CSS,HTML,RWD,Dashboard">
-    <title>Transactions - {{title}}</title>
+    <title>Terminal - {{title}}</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js" integrity="sha512-894YE6QWD5I59HgZOGReFYm4dnWc1Qt5NtvYSaNcOP+u1T9qYdvdihz0PPSiiqn/+/3e7Jo4EaG7TubfWGUrMQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     <link rel="stylesheet" href="https://cdn.datatables.net/1.12.1/css/jquery.dataTables.min.css">
     <script src="https://cdn.datatables.net/1.12.1/js/jquery.dataTables.min.js"></script>
@@ -27,6 +27,8 @@
     <link rel="icon" type="image/png" sizes="96x96" href="assets/favicon/favicon-96x96.png">
     <link rel="icon" type="image/png" sizes="16x16" href="assets/favicon/favicon-16x16.png">
     <link rel="manifest" href="assets/favicon/manifest.json">
+    <link href="https://cdn.jsdelivr.net/gh/gitbrent/bootstrap4-toggle@3.6.1/css/bootstrap4-toggle.min.css" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/gh/gitbrent/bootstrap4-toggle@3.6.1/js/bootstrap4-toggle.min.js"></script>
     <meta name="msapplication-TileColor" content="#ffffff">
     <meta name="msapplication-TileImage" content="assets/favicon/ms-icon-144x144.png">
     <meta name="theme-color" content="#ffffff">
@@ -40,12 +42,6 @@
     <link href="css/examples.css" rel="stylesheet">
     <!-- Global site tag (gtag.js) - Google Analytics-->
     <script async="" src="https://www.googletagmanager.com/gtag/js?id=UA-118965717-3"></script>
-    <style>
-      .dataTables_scrollBody table {
-  margin-left:0px !important;
-  width: 100% !important;
-}
-  </style>
     <script>
       window.dataLayer = window.dataLayer || [];
 
@@ -59,6 +55,52 @@
       gtag('config', 'UA-118965717-5');
     </script>
     <link href="vendors/@coreui/chartjs/css/coreui-chartjs.css" rel="stylesheet">
+    <style>
+        .dataTables_scrollBody table {
+    margin-left:0px !important;
+    width: 100% !important;
+}
+
+
+.led-box {
+    align-items: center;
+    text-align: center;
+  height: 30px;
+  width: 100%;
+
+}
+#det{
+    display: none;
+}
+.toggle.btn{
+    min-width: 50%;
+
+}
+.toggle-group label{
+    font-weight: bolder;
+    color:#fff;
+    margin-top:0px;
+}
+.led-red {
+  width: 24px;
+  height: 24px;
+  background-color: #F00;
+  border-radius: 50%;
+  box-shadow: rgba(0, 0, 0, 0.2) 0 -1px 7px 1px, inset #441313 0 -1px 9px, rgba(255, 0, 0, 0.5) 0 2px 12px;
+  
+}
+
+
+.led-green {
+  width: 24px;
+  height: 24px;
+  background-color: #ABFF00;
+  border-radius: 50%;
+  box-shadow: rgba(0, 0, 0, 0.2) 0 -1px 7px 1px, inset #304701 0 -1px 9px, #89FF00 0 2px 12px;
+}
+
+
+    </style>
   </head>
   <body>
     <div class="sidebar sidebar-dark sidebar-fixed" id="sidebar">
@@ -90,32 +132,33 @@
         </ul>
         
       </li>
-      <li class="nav-group"><a class="nav-link nav-group-toggle active" href="#">
+      <li class="nav-group"><a class="nav-link nav-group-toggle" href="#">
         <svg class="nav-icon">
           <use xlink:href="vendors/@coreui/icons/svg/free.svg#cil-cash"></use>
         </svg> Transactions</a>
       <ul class="nav-group-items">
-        <li class="nav-item"><a class="nav-link " href="./all-transactions"><span class="nav-icon"></span>All Transactions</a></li>
-        <li class="nav-item"><a class="nav-link active" href="./pending-transactions"><span class="nav-icon"></span>Pending Transactions</a></li>
+        <li class="nav-item"><a class="nav-link" href="./all-transactions"><span class="nav-icon"></span>All Transactions</a></li>
+        <li class="nav-item"><a class="nav-link" href="./pending-transactions"><span class="nav-icon"></span>Pending Transactions</a></li>
         <li class="nav-item"><a class="nav-link" href="./site-transactions"><span class="nav-icon"></span>Site Wise Transaction</a></li>
         <li class="nav-item"><a class="nav-link" href="./search-transactions"><span class="nav-icon"></span>Search Transactions</a></li>
       </ul>
       
     </li>
-       
     <li class="nav-item"><a class="nav-link " href="./all-vouchers">
-      <svg class="nav-icon">
-        <use xlink:href="vendors/@coreui/icons/svg/free.svg#cil-notes"></use>
-      </svg> Vouchers</a>
-    
-  </li> 
+        <svg class="nav-icon">
+          <use xlink:href="vendors/@coreui/icons/svg/free.svg#cil-notes"></use>
+        </svg> Vouchers</a>
+      
+    </li>
        
-  <li class="nav-item"><a class="nav-link " href="./terminals">
-    <svg class="nav-icon">
-      <use xlink:href="vendors/@coreui/icons/svg/free.svg#cil-settings"></use>
-    </svg> Terminals</a>
-  
-</li>  
+    <li class="nav-item"><a class="nav-link active " href="./terminals">
+      <svg class="nav-icon">
+        <use xlink:href="vendors/@coreui/icons/svg/free.svg#cil-settings"></use>
+      </svg> Terminals</a>
+    
+  </li>  
+       
+       
       
         
  
@@ -171,7 +214,7 @@
           <nav aria-label="breadcrumb">
             <ol class="breadcrumb my-0 ms-2">
               <li class="breadcrumb-item active">
-                <!-- if breadcrumb is single--><span>Transactions</span>
+                <!-- if breadcrumb is single--><span>Terminal</span>
               </li>
           
             </ol>
@@ -179,54 +222,107 @@
         </div>
       </header>
       <div class="body flex-grow-1 px-3 bg-white">
-        <div class="container-lg bg-white">
+        <div class="container-lg bg-white" id="det">
       
           <!-- /.row-->
-            <div class="row ">
-                <table id="tb" class="display  cell-border hover  stripe" >
-                    <thead  class="text-center">
-                        <tr  class="text-center">
-                            <th class="text-center">TID</th>
-                            <th class="text-center">Reciept #</th>
-                            <th class="text-center">Date</th>
-                            <th class="text-center">Time</th>
-                            <th class="text-center">Service</th>
-                            <th class="text-center">Phone</th>
-                            <th class="text-center">Pending (AED)</th>
-                            <th class="text-center">Total (AED)</th>
-                            <th class="text-center">Action</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                            {%for t in transactions%}
-                            <tr>
-                                <td class="text-center fw-bold"><a class="text-info" href="./transaction/{{t['TID']}}">{{t['TID']}}</a></td>
-                                <td class="text-center fw-bold"><a class="text-success" href="./reciept/{{t['receipt_id']}}">{{t['receipt_id']}}</a></td>
-                                <td class="text-center fw-bold">{{t['date']}}</td>
-                                <td class="text-center fw-bold">{{t['time']}}</td>
-                                <td class="text-center fw-bold">{{t['service']}}</td>
-                                <td class="text-center fw-bold"><a class="text-warning" href="tel:{{t['phone']}}">{{t['phone']}}</a></td>
-                                <td class="text-center fw-bold">{{t['pending_amount']}}</td>
-                                <td class="text-center fw-bold">{{t['total_payment']}}</td>
-                                <td class="text-center fw-bold">N/A</td>
-                            </tr>
-                            {%endfor%}
-                    </tbody>
-                    <tfoot  class="text-center">
-                        <tr  class="text-center">
-                            <th class="text-center">TID</th>
-                            <th class="text-center">Reciept #</th>
-                            <th class="text-center">Date</th>
-                            <th class="text-center">Time</th>
-                            <th class="text-center">Service</th>
-                            <th class="text-center">Phone</th>
-                            <th class="text-center">Pending (AED)</th>
-                            <th class="text-center">Total (AED)</th>
-                            <th class="text-center">Action</th>
-                        </tr>
-                    </tfoot>
-                </table>
+            <div class="row justify-content-center">
+                <div class="card shadow-lg p-2 col-lg-5 col-sm-12 col-md-6 bg-light border-0">
+                  
+                        <h2 class="fw-bold justify-content-center mt-3 text-dark row text-center">Terminal</h2>
+                        <div class="row">
+                            
+                            <div class="form-group col-12">
+                                <label class="fw-bold text-info">Serial</label>
+                                <label class="form-control fw-bold" >{{terminal['TID']}}</label>                        
+                            </div>
+                        </div>  
+                        <div class="row mt-1">
+                            <h3 class="fw-bold text-dark">Site Detail</h3>
+                            <div class="form-group col-6 p-4 col-md-6 col-sm-12">
+                                <label class="fw-bold text-info">Site Code</label>
+                                <label class="form-control fw-bold" >{{terminal['site']['code']}}</label>
+                            </div>
+                            <div class="form-group col-6 p-4 col-md-6 col-sm-12">
+                                <label class="fw-bold text-info">Site Name</label>
+                                <label class="form-control fw-bold" >{{terminal['site']['name']}}</label>
+                            </div>
+                        </div>  
+                        <div class="row mt-1">
+                            <h3 class="fw-bold text-dark">Configuration</h3>
+                            <div class="form-group col-6 p-4 col-md-6 col-sm-12">
+                                <label class="fw-bold text-info">Status  </label>
+                                <center>
+                                    {% if "on" in terminal['config']['status'] %}
+                                    <div class="led-box">                   
+                                     <div class="led-green"></div>                          
+                                   </div>
+                                   {% else %}
+                                   <div class="led-box">
+                                     <div class="led-red"></div>
+                                   </div>
+                                     {% endif %}                                     
+                                 </center>
+                               
+                              
+                            </div>
+                            <div class="form-group col-6 p-4 col-md-6 col-sm-12">
+                                <label class="fw-bold text-info">Stacker <i>({{remaining_space}})</i></label>
+                                <center>
+                                    {% if "Full" in terminal['config']['stacker'] %}
+                                    <div class="led-box">
+                                     
+                                     <div class="led-red"></div>
+                                
+                                   </div>
+                                   {% else %}
+                                   <div class="led-box">
+                                     <div class="led-green"></div>
+                                   </div>
+                                     {% endif %}
+                                       
+                                 </center>
+                            </div>
+
+
+
+                        </div> 
+                        <div class="row mt-1">
+                          <div class="form-group col-6 p-4 col-md-6 col-sm-12">
+                            
+                          </div>
+                        </div>  
+                    <form class="col-md-12 form" action="/terminal/{{terminal['TID']}}" method="POST" >
+                        
+                        <div class="row justify-content-center">
+                            <div class="p-2 form-group col-lg-7 col-sm-4 col-md-7" >
+                            {% if "on" in terminal['config']['status'] %}
+                            <input class="form-control" name="status" id="st" type="checkbox" checked  style="width:100% !important"  data-toggle="toggle" data-on="ON" data-off="OFF" data-onstyle="success" data-offstyle="danger">          
+                            {% else %}
+                            <input class="form-control" name="status" id="st" type="checkbox"   style="width:100% !important"  data-toggle="toggle" data-on="ON" data-off="OFF" data-onstyle="success" data-offstyle="danger">          
+                            {%endif%}
+                        </div>
+                        <div class="p-2 form-group col-lg-2 col-sm-4 col-md-2" >
+                           <input class="btn btn-info fw-bold text-light" type="submit" value="Apply">
+                        </div>
+                            
+                       
+                    </div>
+                        
+                    </form>
+                   <div class="row mt-2 ">
+                    <h3 class="fw-bold text-dark">Logs <button class="btn-danger btn fw-bold text-light float-end" onclick="printDiv('lg')">Print</button></h3>
+                 </div>
+                 <table id="lg" class="table p-1" style="height:300px !important;overflow-y: auto;" border="1" cellspacing="0" cellpadding="1">
+                  {% for  l in logs %}
+                  <tr>
+                    <td>[{{l["date"]}} {{l["time"]}}]  {{l["log"]}}</td>
+                  </tr>
+                  {%endfor%}
+                 </table>
+                  
+                </div>
             </div>
+          
           <!-- /.card.mb-4-->
         
           <!-- /.row-->
@@ -235,7 +331,7 @@
         </div>
       </div>
       <footer class="footer">
-        <div><a href="./">Non Stop Payments Providers LLC. </a> © 2022-2032</div>
+        <div><a href="/">Non Stop Payments Providers LLC. </a> © 2022-2032</div>
       </footer>
     </div>
     <!-- CoreUI and necessary plugins-->
@@ -251,7 +347,27 @@
     <Script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-streaming@2.0.0/dist/chartjs-plugin-streaming.min.js"></Script>
     <script src="js/main.js"></script>
     <script>
+
+function printDiv(divName) {
+     var printContents = document.getElementById(divName).innerHTML;
+     var originalContents = document.body.innerHTML;
+
+     document.body.innerHTML = printContents;
+
+     window.print();
+
+     document.body.innerHTML = originalContents;
+}
         $(document).ready(function(){
+
+
+         
+
+
+            setTimeout(function(){
+                $("#det").show()
+            },1000)
+
             $("#tb").DataTable({
                 processing: true,
        

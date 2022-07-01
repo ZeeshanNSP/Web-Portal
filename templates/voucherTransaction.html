@@ -89,7 +89,7 @@
         </ul>
         
       </li>
-      <li class="nav-group"><a class="nav-link nav-group-toggle active" href="#">
+      <li class="nav-group"><a class="nav-link nav-group-toggle " href="#">
         <svg class="nav-icon">
           <use xlink:href="/vendors/@coreui/icons/svg/free.svg#cil-cash"></use>
         </svg> Transactions</a>
@@ -102,20 +102,20 @@
       
     </li>
        
-         
-    <li class="nav-item"><a class="nav-link" href="./all-vouchers">
-      <svg class="nav-icon">
-        <use xlink:href="vendors/@coreui/icons/svg/free.svg#cil-notes"></use>
-      </svg> Vouchers</a>
-    
-  </li>
-     
-  <li class="nav-item"><a class="nav-link " href="./terminals">
-    <svg class="nav-icon">
-      <use xlink:href="vendors/@coreui/icons/svg/free.svg#cil-settings"></use>
-    </svg> Terminals</a>
-  
-</li>
+    <li class="nav-item"><a class="nav-link active" href="./all-vouchers">
+        <svg class="nav-icon">
+          <use xlink:href="vendors/@coreui/icons/svg/free.svg#cil-notes"></use>
+        </svg> Vouchers</a>
+      
+    </li>
+    <li class="nav-item"><a class="nav-link " href="./terminals">
+        <svg class="nav-icon">
+          <use xlink:href="vendors/@coreui/icons/svg/free.svg#cil-settings"></use>
+        </svg> Terminals</a>
+      
+    </li>
+       
+       
       
         
  
@@ -186,25 +186,22 @@
                 <div class="card shadow-lg p-2 col-lg-5 col-sm-12 col-md-6 bg-light border-0">
                     <table class="table">
                         {% for i in keys %}
-                        {% if i not in "plan" %}
+                
 
                         <tr>
 
                             <td class="fw-bold text-info">
                                 {{text[i]}}
                              
-
-
-
                             </td>
                             <td class="fw-bolder text-dark">
                                 
                                 {% if "TID" in i %}
-                                <a class="text-dark fw-bold" href="/transaction/{{transaction[i]}}">{{transaction[i]}}</a>
+                                <a class="text-dark fw-bold" href="/voucherT/{{transaction[i]}}">{{transaction[i]}}</a>
                                 {% elif "receipt_id" in i %}
-                                <a class="text-dark fw-bold" href="/reciept/{{transaction[i]}}">{{transaction[i]}}</a>
+                                <a class="text-dark fw-bold" href="/voucher/{{transaction[i]}}">{{transaction[i]}}</a>
                                 {% else %}
-                                {{transaction[i]}}
+                                 {{transaction[i]}}
                                 {% endif %}
 
                                 {% if  "pending" in i or "payment" in i %}
@@ -213,30 +210,8 @@
 
                             </td>
                         </tr>
-                        {% else %}
-                            <tr>
-                                <td class="fw-bold text-info" >Plan</td>
-                                <td>
-                                    <table>
-                                        <tr>
-                                            <td class="text-info fw-medium">Profile Name : </td>
-                                            <td class="text-dark fw-bold">{{transaction[i]['profile']}}</td>
-                                        </tr>
-                                        <tr>
-                                            <td class="text-info fw-medium">Validity : </td>
-                                            <td class="text-dark fw-bold">{{transaction[i]['validity']}}</td>
-                                        </tr>
-                                        <tr>
-                                            <td class="text-info fw-medium">Price : </td>
-                                            <td class="text-dark fw-bold">{{transaction[i]['price']}} AED</td>
-                                        </tr>
-                                    </table>
-                                
-                                  
-                                
-                            </td>
-                            </tr>
-                        {%endif%}
+                      
+                 
                         {%endfor%}
                     </table>
                     

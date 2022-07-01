@@ -14,6 +14,7 @@ from flask_cors import CORS
 import random as r
 from numerize import numerize
 from rg import ReceiptGenerator
+from vg import VoucherGenerator
 import string
 
 
@@ -28,7 +29,8 @@ mydb = myclient["NV9-Testing"]
 users = mydb["users"]
 transactions = mydb["transactions"]
 logs = mydb["log"]
-
+terminals = mydb["terminal"]
+STACKER_LIMIT = 510
 #configuration variables
 app.secret_key = "53C437"
 USERS = None
@@ -50,19 +52,46 @@ def LoadUsers():
     USERS = json.load(f)
     f.close()
 
+def getTerminals(query={}):
+    t = terminals.find(query)
+    res = []
+    for i in t:
+        res.append(i)
+    return res
 
 def updateCred():
     f = open("cred.json","w")
     f.write(json.dumps(USERS))
     f.close()
-def getTransactions(query={}):
-    r = transactions.find(query)
+
+def getLogs(query={}):
+    r = logs.find(query)
     res = []
     for i in r:
         res.append(i)
     return res
 
+def getTransactions(query={}):
+    r = transactions.find(query)
+    res = []
+    for i in r:
+        if "pin" not in i:
+            res.append(i)
+    return res
 
+def getVouchers(query={}):
+    r = transactions.find({})
+    res = []
+    for i in r:
+        if "pin" in i:
+            res.append(i)
+    return res
+def getClients(query={}):
+    r = users.find(query)
+    res = []
+    for i in r:
+        res.append(i)
+    return res
 def currentUser():
     if sessionCheck():
         u = session["user"]
@@ -73,11 +102,89 @@ def currentUser():
 # 
 # 
 #  
+@app.route("/terminal/<id>",methods=["GET","POST"])
+def terminalDetail(id):
+    if sessionCheck():
+        if request.method =="GET":
+            t = getTerminals({"TID":{"$eq":id}})[0]
+            rem = t['config']['counter']
+            tt = 0
+            for i in rem:
+                tt = tt+ rem[i]
+            return render_template("terminalDetail.html",title=TITLE,user = currentUser(),noti = None,terminal = t,remaining_space= STACKER_LIMIT -tt,logs=getLogs())
+        elif request.method == "POST":
+            st = request.form.get("status")
+            if st is None:
+                query = { "TID": {"$eq":id} }
+                updatedVal = { "$set": { "config.status": "off" } }
+                terminals.update_one(query,updatedVal)
+            if st == "on":
+                query = { "TID": {"$eq":id} }
+                updatedVal = { "$set": { "config.status": "on" } }
+                terminals.update_one(query,updatedVal)
+            return redirect("/terminal/"+id)
+    else:
+        return redirect("/")
 
+@app.route("/terminals",methods=["GET"])
+def allTerminals():
+    if sessionCheck():
+        t = getTerminals()
+        return render_template("terminals.html",title=TITLE,user = currentUser(),noti = None,terminals = t,logs=getLogs())
+    else:
+        return redirect("/")
 @app.errorhandler(404) 
 # inbuilt function which takes error as parameter
 def not_found(e):
   return render_template("404.html")
+
+@app.route("/all-vouchers",methods=["GET"])
+def allVouchers():
+    if sessionCheck():
+        v = getVouchers()
+        return render_template("allVouchers.html",title=TITLE,user = currentUser(),noti = None,vouchers = v)
+    else:
+        return redirect("/")
+@app.route("/voucherT/<id>",methods=["GET"])
+def voucherTransaction(id):
+    if sessionCheck():
+        t  = getVouchers({"TID":{"$eq":id}})[0]
+        k = list(t.keys())
+        k = k[1:]
+        txt = {}
+        for i in k:
+            j = i.replace("_"," ")
+            txt[i] = string.capwords(j)
+        return render_template("voucherTransaction.html",title=TITLE,user = currentUser(),noti = None,transaction = t,keys = k,text = txt)
+    else:
+        return redirect("/")
+@app.route("/clients",methods=["GET"])
+def clientsDup():
+    return redirect("/clients-list")
+@app.route("/client/<id>",methods=["GET"])
+def clientDetail(id):
+    if sessionCheck():
+        c = getClients({"phone":{"$eq":id}})
+        return render_template("client.html",title=TITLE,user = currentUser(),noti = None,clients = c)
+    else:
+        return redirect("/")
+@app.route("/clients-list",methods=["GET"])
+def clientsList():
+    if sessionCheck():
+        c = getClients()
+        return render_template("clients.html",title=TITLE,user = currentUser(),noti = None, clients = c)
+    else:
+        return redirect("/")
+@app.route("/voucher/<id>",methods = ["GET"])
+def voucherDetail(id):
+    if sessionCheck():
+        t = getVouchers({"pin":{"$eq":id}})[0]
+        #,rid,tid,dt,tm,ser,pin,plan
+        g = VoucherGenerator(t["receipt_id"],t["TID"],t["date"],t["time"],t["service"],t["pin"],t["plan"])
+        g.save_output()
+        return render_template("voucherDetail.html",title=TITLE,user = currentUser(),noti = None,transaction = t)
+    else:
+        return redirect("/")
 
 @app.route("/search-transactions",methods =["GET"])
 def searchTransaction():

@@ -40,12 +40,6 @@
     <link href="css/examples.css" rel="stylesheet">
     <!-- Global site tag (gtag.js) - Google Analytics-->
     <script async="" src="https://www.googletagmanager.com/gtag/js?id=UA-118965717-3"></script>
-    <style>
-      .dataTables_scrollBody table {
-  margin-left:0px !important;
-  width: 100% !important;
-}
-  </style>
     <script>
       window.dataLayer = window.dataLayer || [];
 
@@ -59,6 +53,42 @@
       gtag('config', 'UA-118965717-5');
     </script>
     <link href="vendors/@coreui/chartjs/css/coreui-chartjs.css" rel="stylesheet">
+    <style>
+        .dataTables_scrollBody table {
+    margin-left:0px !important;
+    width: 100% !important;
+}
+
+
+.led-box {
+    align-items: center;
+    text-align: center;
+  height: 30px;
+  width: 100%;
+
+}
+
+
+.led-red {
+  width: 24px;
+  height: 24px;
+  background-color: #F00;
+  border-radius: 50%;
+  box-shadow: rgba(0, 0, 0, 0.2) 0 -1px 7px 1px, inset #441313 0 -1px 9px, rgba(255, 0, 0, 0.5) 0 2px 12px;
+  
+}
+
+
+.led-green {
+  width: 24px;
+  height: 24px;
+  background-color: #ABFF00;
+  border-radius: 50%;
+  box-shadow: rgba(0, 0, 0, 0.2) 0 -1px 7px 1px, inset #304701 0 -1px 9px, #89FF00 0 2px 12px;
+}
+
+
+    </style>
   </head>
   <body>
     <div class="sidebar sidebar-dark sidebar-fixed" id="sidebar">
@@ -90,32 +120,33 @@
         </ul>
         
       </li>
-      <li class="nav-group"><a class="nav-link nav-group-toggle active" href="#">
+      <li class="nav-group"><a class="nav-link nav-group-toggle" href="#">
         <svg class="nav-icon">
           <use xlink:href="vendors/@coreui/icons/svg/free.svg#cil-cash"></use>
         </svg> Transactions</a>
       <ul class="nav-group-items">
-        <li class="nav-item"><a class="nav-link " href="./all-transactions"><span class="nav-icon"></span>All Transactions</a></li>
-        <li class="nav-item"><a class="nav-link active" href="./pending-transactions"><span class="nav-icon"></span>Pending Transactions</a></li>
+        <li class="nav-item"><a class="nav-link" href="./all-transactions"><span class="nav-icon"></span>All Transactions</a></li>
+        <li class="nav-item"><a class="nav-link" href="./pending-transactions"><span class="nav-icon"></span>Pending Transactions</a></li>
         <li class="nav-item"><a class="nav-link" href="./site-transactions"><span class="nav-icon"></span>Site Wise Transaction</a></li>
         <li class="nav-item"><a class="nav-link" href="./search-transactions"><span class="nav-icon"></span>Search Transactions</a></li>
       </ul>
       
     </li>
-       
     <li class="nav-item"><a class="nav-link " href="./all-vouchers">
-      <svg class="nav-icon">
-        <use xlink:href="vendors/@coreui/icons/svg/free.svg#cil-notes"></use>
-      </svg> Vouchers</a>
-    
-  </li> 
+        <svg class="nav-icon">
+          <use xlink:href="vendors/@coreui/icons/svg/free.svg#cil-notes"></use>
+        </svg> Vouchers</a>
+      
+    </li>
        
-  <li class="nav-item"><a class="nav-link " href="./terminals">
-    <svg class="nav-icon">
-      <use xlink:href="vendors/@coreui/icons/svg/free.svg#cil-settings"></use>
-    </svg> Terminals</a>
-  
-</li>  
+    <li class="nav-item"><a class="nav-link active " href="./terminals">
+      <svg class="nav-icon">
+        <use xlink:href="vendors/@coreui/icons/svg/free.svg#cil-settings"></use>
+      </svg> Terminals</a>
+    
+  </li>  
+       
+       
       
         
  
@@ -171,7 +202,7 @@
           <nav aria-label="breadcrumb">
             <ol class="breadcrumb my-0 ms-2">
               <li class="breadcrumb-item active">
-                <!-- if breadcrumb is single--><span>Transactions</span>
+                <!-- if breadcrumb is single--><span>Terminals</span>
               </li>
           
             </ol>
@@ -186,42 +217,67 @@
                 <table id="tb" class="display  cell-border hover  stripe" >
                     <thead  class="text-center">
                         <tr  class="text-center">
-                            <th class="text-center">TID</th>
-                            <th class="text-center">Reciept #</th>
-                            <th class="text-center">Date</th>
-                            <th class="text-center">Time</th>
-                            <th class="text-center">Service</th>
-                            <th class="text-center">Phone</th>
-                            <th class="text-center">Pending (AED)</th>
-                            <th class="text-center">Total (AED)</th>
+                            <th class="text-center">Terminal Serial</th>
+                            <th class="text-center">Site </th>
+                            <th class="text-center">Site Name</th>
+                            <th class="text-center">Status</th>
+                            <th class="text-center">Stacker</th>
                             <th class="text-center">Action</th>
                         </tr>
                     </thead>
                     <tbody>
-                            {%for t in transactions%}
+                            {%for t in terminals%}
                             <tr>
-                                <td class="text-center fw-bold"><a class="text-info" href="./transaction/{{t['TID']}}">{{t['TID']}}</a></td>
-                                <td class="text-center fw-bold"><a class="text-success" href="./reciept/{{t['receipt_id']}}">{{t['receipt_id']}}</a></td>
-                                <td class="text-center fw-bold">{{t['date']}}</td>
-                                <td class="text-center fw-bold">{{t['time']}}</td>
-                                <td class="text-center fw-bold">{{t['service']}}</td>
-                                <td class="text-center fw-bold"><a class="text-warning" href="tel:{{t['phone']}}">{{t['phone']}}</a></td>
-                                <td class="text-center fw-bold">{{t['pending_amount']}}</td>
-                                <td class="text-center fw-bold">{{t['total_payment']}}</td>
+                                <td class="text-center fw-bold"><a class="text-info" href="./terminal/{{t['TID']}}">{{t['TID']}}</a></td>
+                                <td class="text-center fw-bold"><a class="text-success" href="./site/{{t['site']['code']}}">{{t['site']['code']}}</a></td>
+                                <td class="text-center fw-bold">{{t['site']['name']}}</td>
+                                <td class="text-center fw-bold text-center">
+                                    <center>
+                                   {% if "on" in t['config']['status'] %}
+                                   <div class="led-box">
+                                    
+                                    <div class="led-green"></div>
+                               
+                                  </div>
+                                  {% else %}
+                                  <div class="led-box">
+                                    <div class="led-red"></div>
+                                  </div>
+                                    {% endif %}
+                                      
+                                </center>
+                                    
+                                    
+                                
+                                </td>
+                                <td class="text-center fw-bold">
+                                    <center>
+                                        {% if "Full" in t['config']['stacker'] %}
+                                        <div class="led-box">
+                                         
+                                         <div class="led-red"></div>
+                                    
+                                       </div>
+                                       {% else %}
+                                       <div class="led-box">
+                                         <div class="led-green"></div>
+                                       </div>
+                                         {% endif %}
+                                           
+                                     </center>
+                                    
+                                 </td>
                                 <td class="text-center fw-bold">N/A</td>
                             </tr>
                             {%endfor%}
                     </tbody>
                     <tfoot  class="text-center">
                         <tr  class="text-center">
-                            <th class="text-center">TID</th>
-                            <th class="text-center">Reciept #</th>
-                            <th class="text-center">Date</th>
-                            <th class="text-center">Time</th>
-                            <th class="text-center">Service</th>
-                            <th class="text-center">Phone</th>
-                            <th class="text-center">Pending (AED)</th>
-                            <th class="text-center">Total (AED)</th>
+                          <th class="text-center">Terminal Serial</th>
+                            <th class="text-center">Site </th>
+                            <th class="text-center">Site Name</th>
+                            <th class="text-center">Status</th>
+                            <th class="text-center">Stacker</th>
                             <th class="text-center">Action</th>
                         </tr>
                     </tfoot>

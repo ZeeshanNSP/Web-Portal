@@ -2,14 +2,14 @@
 
 <html lang="en">
   <head>
-    <base href="./">
+    <base href="/">
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
     <meta name="description" content="CoreUI - Open Source Bootstrap Admin Template">
     <meta name="author" content="Łukasz Holeczek">
     <meta name="keyword" content="Bootstrap,Admin,Template,Open,Source,jQuery,CSS,HTML,RWD,Dashboard">
-    <title>Transactions - {{title}}</title>
+    <title>Client - {{title}}</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js" integrity="sha512-894YE6QWD5I59HgZOGReFYm4dnWc1Qt5NtvYSaNcOP+u1T9qYdvdihz0PPSiiqn/+/3e7Jo4EaG7TubfWGUrMQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     <link rel="stylesheet" href="https://cdn.datatables.net/1.12.1/css/jquery.dataTables.min.css">
     <script src="https://cdn.datatables.net/1.12.1/js/jquery.dataTables.min.js"></script>
@@ -40,12 +40,6 @@
     <link href="css/examples.css" rel="stylesheet">
     <!-- Global site tag (gtag.js) - Google Analytics-->
     <script async="" src="https://www.googletagmanager.com/gtag/js?id=UA-118965717-3"></script>
-    <style>
-      .dataTables_scrollBody table {
-  margin-left:0px !important;
-  width: 100% !important;
-}
-  </style>
     <script>
       window.dataLayer = window.dataLayer || [];
 
@@ -80,42 +74,43 @@
             <li class="nav-item"><a class="nav-link" href="./delete-site"><span class="nav-icon"></span> Delete Site</a></li>  
           </ul>
         </li>
-        <li class="nav-group"><a class="nav-link nav-group-toggle" href="#">
+        <li class="nav-group"><a class="nav-link nav-group-toggle active" href="#">
           <svg class="nav-icon">
             <use xlink:href="vendors/@coreui/icons/svg/free.svg#cil-user"></use>
           </svg> Clients</a>
         <ul class="nav-group-items">
-          <li class="nav-item"><a class="nav-link" href="./clients-list"><span class="nav-icon"></span>Clients List</a></li>
+          <li class="nav-item"><a class="nav-link active" href="./clients-list"><span class="nav-icon"></span>Clients List</a></li>
           
         </ul>
         
       </li>
-      <li class="nav-group"><a class="nav-link nav-group-toggle active" href="#">
+      <li class="nav-group"><a class="nav-link nav-group-toggle " href="#">
         <svg class="nav-icon">
           <use xlink:href="vendors/@coreui/icons/svg/free.svg#cil-cash"></use>
         </svg> Transactions</a>
       <ul class="nav-group-items">
-        <li class="nav-item"><a class="nav-link " href="./all-transactions"><span class="nav-icon"></span>All Transactions</a></li>
-        <li class="nav-item"><a class="nav-link active" href="./pending-transactions"><span class="nav-icon"></span>Pending Transactions</a></li>
+        <li class="nav-item"><a class="nav-link active" href="./all-transactions"><span class="nav-icon"></span>All Transactions</a></li>
+        <li class="nav-item"><a class="nav-link" href="./pending-transactions"><span class="nav-icon"></span>Pending Transactions</a></li>
         <li class="nav-item"><a class="nav-link" href="./site-transactions"><span class="nav-icon"></span>Site Wise Transaction</a></li>
         <li class="nav-item"><a class="nav-link" href="./search-transactions"><span class="nav-icon"></span>Search Transactions</a></li>
       </ul>
       
     </li>
-       
     <li class="nav-item"><a class="nav-link " href="./all-vouchers">
-      <svg class="nav-icon">
-        <use xlink:href="vendors/@coreui/icons/svg/free.svg#cil-notes"></use>
-      </svg> Vouchers</a>
-    
-  </li> 
+        <svg class="nav-icon">
+          <use xlink:href="vendors/@coreui/icons/svg/free.svg#cil-notes"></use>
+        </svg> Client</a>
+      
+    </li>
        
-  <li class="nav-item"><a class="nav-link " href="./terminals">
-    <svg class="nav-icon">
-      <use xlink:href="vendors/@coreui/icons/svg/free.svg#cil-settings"></use>
-    </svg> Terminals</a>
-  
-</li>  
+         
+    <li class="nav-item"><a class="nav-link " href="./terminals">
+        <svg class="nav-icon">
+          <use xlink:href="vendors/@coreui/icons/svg/free.svg#cil-settings"></use>
+        </svg> Terminals</a>
+      
+    </li>
+       
       
         
  
@@ -171,7 +166,7 @@
           <nav aria-label="breadcrumb">
             <ol class="breadcrumb my-0 ms-2">
               <li class="breadcrumb-item active">
-                <!-- if breadcrumb is single--><span>Transactions</span>
+                <!-- if breadcrumb is single--><span>Clients</span>
               </li>
           
             </ol>
@@ -180,58 +175,40 @@
       </header>
       <div class="body flex-grow-1 px-3 bg-white">
         <div class="container-lg bg-white">
-      
+            
           <!-- /.row-->
-            <div class="row ">
-                <table id="tb" class="display  cell-border hover  stripe" >
-                    <thead  class="text-center">
-                        <tr  class="text-center">
-                            <th class="text-center">TID</th>
-                            <th class="text-center">Reciept #</th>
-                            <th class="text-center">Date</th>
-                            <th class="text-center">Time</th>
-                            <th class="text-center">Service</th>
-                            <th class="text-center">Phone</th>
-                            <th class="text-center">Pending (AED)</th>
-                            <th class="text-center">Total (AED)</th>
-                            <th class="text-center">Action</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                            {%for t in transactions%}
-                            <tr>
-                                <td class="text-center fw-bold"><a class="text-info" href="./transaction/{{t['TID']}}">{{t['TID']}}</a></td>
-                                <td class="text-center fw-bold"><a class="text-success" href="./reciept/{{t['receipt_id']}}">{{t['receipt_id']}}</a></td>
-                                <td class="text-center fw-bold">{{t['date']}}</td>
-                                <td class="text-center fw-bold">{{t['time']}}</td>
-                                <td class="text-center fw-bold">{{t['service']}}</td>
-                                <td class="text-center fw-bold"><a class="text-warning" href="tel:{{t['phone']}}">{{t['phone']}}</a></td>
-                                <td class="text-center fw-bold">{{t['pending_amount']}}</td>
-                                <td class="text-center fw-bold">{{t['total_payment']}}</td>
-                                <td class="text-center fw-bold">N/A</td>
-                            </tr>
-                            {%endfor%}
-                    </tbody>
-                    <tfoot  class="text-center">
-                        <tr  class="text-center">
-                            <th class="text-center">TID</th>
-                            <th class="text-center">Reciept #</th>
-                            <th class="text-center">Date</th>
-                            <th class="text-center">Time</th>
-                            <th class="text-center">Service</th>
-                            <th class="text-center">Phone</th>
-                            <th class="text-center">Pending (AED)</th>
-                            <th class="text-center">Total (AED)</th>
-                            <th class="text-center">Action</th>
-                        </tr>
-                    </tfoot>
-                </table>
-            </div>
-          <!-- /.card.mb-4-->
+          <div class="row justify-content-center">
+            <div class="card shadow-lg p-2 col-lg-5 col-sm-12 col-md-6 bg-light border-0">
+                <table class="table">
+                    <tr>
+                        <td class="fw-bold text-info">Name : </td>
+                        <td class="fw-bold text-dark">{{clients[0]['name']}}</td>
+                    </tr>
+                    <tr>
+                        <td class="fw-bold text-info">Phone : </td>
+                        <td class="fw-bold text-dark"><a href="/client/{{clients[0]['phone']}}">{{clients[0]['phone']}}</a></td>
+                    </tr>
+                    <tr>
+                        <td class="fw-bold text-info">Mac Address</td>
+                        <td>
+                            <table>
+                                {% for i in clients %}
         
-          <!-- /.row-->
-         
-          <!-- /.row-->
+                                    <tr>
+                                        <td></td>
+                                        <td class="text-dark fw-bold">{{i['mac_address']}}</td>
+                                    </tr>  
+                                {%endfor%}
+                            </table>
+                        </td>
+                    </tr>
+                 
+                  
+                </table>
+                
+            </div>
+        </div>
+    
         </div>
       </div>
       <footer class="footer">
@@ -254,8 +231,6 @@
         $(document).ready(function(){
             $("#tb").DataTable({
                 processing: true,
-       
-        scrollX: true,
     })
         })
     </script>
