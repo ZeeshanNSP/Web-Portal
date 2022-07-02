@@ -1,3 +1,8 @@
+{% if "root" not in user['type']%}
+<script>
+  window.location.href="/terminals"
+</script>
+{%endif%}
 <!DOCTYPE html>
 
 <html lang="en">
@@ -208,12 +213,7 @@
     <script src="https://cdn.jsdelivr.net/npm/luxon@2.4.0/build/global/luxon.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-luxon@1.1.0/dist/chartjs-adapter-luxon.min.js"></script>
     <Script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-streaming@2.0.0/dist/chartjs-plugin-streaming.min.js"></Script>
-    <script src="/js/main.js"></script>
-    <script>
-        $(document).ready(function(){
-        
-        })
-    </script>
+  
 
   </body>
 </html>

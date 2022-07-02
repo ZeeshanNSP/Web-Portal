@@ -1,3 +1,8 @@
+{% if "root" not in user['type'] %}
+<script>
+  window.location.href="/terminals"
+</script>
+{%endif%}
 <!DOCTYPE html>
 
 <html lang="en">
@@ -67,6 +72,7 @@
        <img class="sidebar-brand-narrow" src="/assets/img/nsp-white-narrow.png" style="width: 40px;">
       </div>
       <ul class="sidebar-nav" data-coreui="navigation" data-simplebar="">
+        {% if "root" in user['type'] %}
         <li class="nav-item active"><a class="nav-link" href="./">
             Dashboard</a></li>
         <li class="nav-title">Operations</li>      

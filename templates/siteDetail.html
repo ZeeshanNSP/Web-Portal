@@ -1,3 +1,8 @@
+{% if "root" not in user['type']%}
+<script>
+  window.location.href="/terminals"
+</script>
+{%endif%}
 <!DOCTYPE html>
 
 <html lang="en">

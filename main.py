@@ -178,6 +178,10 @@ def voucherTransaction(id):
         return redirect("/")
 @app.route("/clients",methods=["GET"])
 def clientsDup():
+    if sessionCheck():
+        u = currentUser()
+        if u['type'] == "root":
+            return render_template("users.html")
     return redirect("/clients-list")
 @app.route("/client/<id>",methods=["GET"])
 def clientDetail(id):
@@ -268,7 +272,7 @@ def profile():
 def index():
     if request.method == "GET":
         if sessionCheck():
-            return render_template("index.html",title=TITLE,clients = numerize.numerize(50000),sess=numerize.numerize(1024),act_voucher=numerize.numerize(5200),vouchers=numerize.numerize(6000))
+            return render_template("index.html",user=currentUser(),title=TITLE,clients = numerize.numerize(50000),sess=numerize.numerize(1024),act_voucher=numerize.numerize(5200),vouchers=numerize.numerize(6000))
         else:
             return render_template("login.html",title = TITLE)
     if request.method == "POST":

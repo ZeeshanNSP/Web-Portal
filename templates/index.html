@@ -1,3 +1,8 @@
+{% if "root" not in user['type']%}
+<script>
+  window.location.href="/terminals"
+</script>
+{%endif%}
 <!DOCTYPE html>
 
 <html lang="en">
@@ -58,7 +63,9 @@
        <img class="sidebar-brand-full" src="/assets/img/nsp-white.png" style="width:200px">
        <img class="sidebar-brand-narrow" src="/assets/img/nsp-white-narrow.png" style="width: 40px;">
       </div>
+
       <ul class="sidebar-nav" data-coreui="navigation" data-simplebar="">
+        
         <li class="nav-item active"><a class="nav-link" href="./">
             Dashboard</a></li>
         <li class="nav-title">Operations</li>      
@@ -268,9 +275,8 @@
     <script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-luxon@1.1.0/dist/chartjs-adapter-luxon.min.js"></script>
     <Script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-streaming@2.0.0/dist/chartjs-plugin-streaming.min.js"></Script>
     <script src="js/main.js"></script>
-    <script>
-      
-    </script>
+
+ 
 
   </body>
 </html>
