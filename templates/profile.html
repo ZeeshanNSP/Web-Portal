@@ -1,8 +1,5 @@
-{% if "root" not in user['type']%}
-<script>
-  window.location.href="/terminals"
-</script>
-{%endif%}
+
+
 <!DOCTYPE html>
 
 <html lang="en">
@@ -64,6 +61,7 @@
        <img class="sidebar-brand-narrow" src="/assets/img/nsp-white-narrow.png" style="width: 40px;">
       </div>
       <ul class="sidebar-nav" data-coreui="navigation" data-simplebar="">
+        {% if  "root" in user['type'] %}
         <li class="nav-item active"><a class="nav-link" href="./">
             Dashboard</a></li>
         <li class="nav-title">Operations</li>      
@@ -105,8 +103,20 @@
       </svg> Vouchers</a>
     
   </li>
-       
-       
+  <li class="nav-item"><a class="nav-link  " href="./terminals">
+    <svg class="nav-icon">
+      <use xlink:href="vendors/@coreui/icons/svg/free.svg#cil-settings"></use>
+    </svg> Terminals</a>
+  
+</li>  
+  {% else %}
+  <li class="nav-item"><a class="nav-link  " href="./terminals">
+    <svg class="nav-icon">
+      <use xlink:href="vendors/@coreui/icons/svg/free.svg#cil-settings"></use>
+    </svg> Terminals</a>
+  
+</li>  
+  {%endif%}  
       
         
  
@@ -126,7 +136,7 @@
            </a>
           <ul class="header-nav d-none d-md-flex">
             <li class="nav-item"><a class="nav-link" href="./">Dashboard</a></li>
-            <li class="nav-item"><a class="nav-link" href="./clients">Users</a></li>
+            <li class="nav-item"><a class="nav-link active" href="./clients">Users</a></li>
           </ul>
           <ul class="header-nav ms-auto"> <li class="nav-itme">
             <svg class="icon me-2">
@@ -178,7 +188,12 @@
           </div> 
             
           <div class="form-group col-lg-4 col-sm-12 col-md-12">
-            <label class="fw-bold" >Password</label>
+            <label class="fw-bold" >Password 
+
+              {% if "root" not in user['type'] %}
+              <small class="fw-bol text-info"><i>(Administrator can change password)</i></small>
+              {%endif%}
+            </label>
             <input type="password" id="pswd" placeholder="Password here..." value="{{ user['password']}}" class="form-control" disabled>
             
           </div>

@@ -122,7 +122,13 @@
     
   </li>  
        
-       
+     {% else %}
+     <li class="nav-item"><a class="nav-link " href="./terminals">
+      <svg class="nav-icon">
+        <use xlink:href="vendors/@coreui/icons/svg/free.svg#cil-settings"></use>
+      </svg> Terminals</a>
+    
+     {%endif%}
       
         
  
@@ -179,15 +185,48 @@
             <ol class="breadcrumb my-0 ms-2">
               <li class="breadcrumb-item active">
                 <!-- if breadcrumb is single--><span>Transactions</span>
-              </li>
-          
+              </li>        
             </ol>
           </nav>
         </div>
       </header>
       <div class="body flex-grow-1 px-3 bg-white">
         <div class="container-lg bg-white">
-      
+      <div class="row col-12  justify-content-start p-2 m-2">
+        <div class="col-lg-6 col-md-6 col-sm-12"> 
+           <h6 class="fw-bold text-dark">Filter</h6>
+          <a href="./all-transactions?diff=30" class="col-lg-3 col-sm-12 col-md-4 btn btn-danger m-1 fw-bold text-light">Last Month</a>
+          <a href="./all-transactions?diff=7" class="col-lg-5 col-sm-12 col-md-4 btn btn-warning m-1 fw-bold text-light">Last Seven Days</a>   
+          <a href="./all-transactions" class="col-lg-3 col-sm-12 col-md-4 btn btn-success m-1 fw-bold text-light">Clear</a>   
+        </div>
+       <div class="col-sm-12 col-lg-6 col-md-6">
+        
+        <form>
+          <div class="row">
+          <div class="form-group col-lg-4 col-sm-12">
+            <label class="fw-bold text-danger">From</label>
+            <input type="date" id="fr-date" name="from" class="form-control">
+          </div>
+          <div class="form-group col-lg-5 col-sm-12">
+            <label class="fw-bold text-info">To</label>
+            <input type="date" id="to-date" name="to" class="form-control">
+          </div>    
+          <div class="form-group col-lg-2 col-sm-12">
+            <label class="fw-bold text-info">&nbsp;</label>
+            <button type="submit"  class="form-control btn btn-info fw-bold text-light">
+              <svg class="icon me-2">
+                <use xlink:href="vendors/@coreui/icons/svg/free.svg#cil-magnifying-glass"></use>
+              </svg>
+            </button>
+           
+          </div>     
+        </div>
+        </form>
+
+       </div>
+
+       
+      </div>
           <!-- /.row-->
             <div class="row ">
                 <table id="tb" class="display  cell-border hover  stripe" >
@@ -258,13 +297,37 @@
     <Script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-streaming@2.0.0/dist/chartjs-plugin-streaming.min.js"></Script>
     <script src="js/main.js"></script>
     <script>
+        const getDate = (diff = 0)=>{
+          var s =new Date()
+          s.setDate(s.getDate()+diff)
+          var y = s.getFullYear()
+          var m = s.getMonth()+1
+          var d = s.getDate()
+          if(m <10){
+            m = `0${m}`
+          }
+          if(d<10){
+            d = `0${d}`
+          }      
+          var fr_dt =`${y}-${m}-${d}`
+          return fr_dt
+        }
         $(document).ready(function(){
-            $("#tb").DataTable({
-                processing: true,
-       
+         
+    if("{{to}}" != "None" && "{{fr}}" != "None"){
+      $("#fr-date").val("{{fr}}")
+      $("#to-date").val("{{to}}")
+    }else{
+      $("#fr-date").val(getDate())
+      $("#to-date").val(getDate(10))
+    }
+          var tab = $("#tb").DataTable({
+                processing: true, 
         scrollX: true,
     })
+    
         })
+       
     </script>
 
   </body>

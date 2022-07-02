@@ -1,13 +1,9 @@
-from ast import Load
 import json
-from msilib.schema import RemoveFile
-from re import L
-from socket import timeout
 import sys
 import time
-from datetime import datetime
+from datetime import datetime, timedelta,date
 import os
-from turtle import title
+from tracemalloc import start
 import pymongo
 from flask import Flask, render_template,redirect,request,jsonify,session,abort,send_from_directory
 from flask_cors import CORS
@@ -37,10 +33,18 @@ USERS = None
 TITLE = "NSP"
 # Methods and operation for the session and other utilities
 def sessionCheck():
-    if "user" in session:
-        return True
-    else:
+    try:
+        if "user" in session:
+            return True
+        else:
+            return False
+    except:
         return False
+def getCurrentDate():
+    from datetime import date
+    now = datetime.now()
+    d1 =  now.strftime("%d/%m/%Y")
+    return str(d1)
 def getCurrentTimeStamp():
     from datetime import date
     now = datetime.now()
@@ -66,7 +70,7 @@ def getSiteById(id):
 
 def updateCred():
     f = open("cred.json","w")
-    f.write(json.dumps(USERS))
+    f.write(json.dumps(USERS,indent=4))
     f.close()
 
 def getLogs(query={}):
@@ -102,6 +106,22 @@ def currentUser():
         u = session["user"]
         return USERS[u]  
 
+def getUsers():
+    res = []
+    u = currentUser()
+    for i in USERS:
+        if not (i == u['username']):
+            res.append(USERS[i])
+    return res
+
+def date_range(start, end):
+    delta = end - start  
+    days = [start + timedelta(days=i) for i in range(delta.days + 1)]
+    return days
+def getDatefromString(s):
+    s = s.split("/")
+    date_time_obj = date(int(s[2]),int(s[1]),int(s[0]))
+    return date_time_obj
 #routes for the web portal   
 # 
 # 
@@ -151,9 +171,12 @@ def allTerminals():
         return render_template("terminals.html",title=TITLE,user = currentUser(),noti = None,terminals = t,logs=getLogs())
     else:
         return redirect("/")
+
+#@app.errorhandler(Exception) 
+#def not_found(e):
+#  return render_template("500.html")
 @app.errorhandler(404) 
-# inbuilt function which takes error as parameter
-def not_found(e):
+def not_found1(e):
   return render_template("404.html")
 
 @app.route("/all-vouchers",methods=["GET"])
@@ -176,12 +199,76 @@ def voucherTransaction(id):
         return render_template("voucherTransaction.html",title=TITLE,user = currentUser(),noti = None,transaction = t,keys = k,text = txt)
     else:
         return redirect("/")
+
+@app.route("/updateUser",methods=["GET","POST"])
+def update_user():
+    if sessionCheck():
+        if request.method == "GET":
+            return redirect("/clients")
+        if request.method  == "POST":
+            global USERS
+            username = request.form.get("username")
+            password = request.form.get("password")
+            type = request.form.get("type")
+            USERS[username]['password'] = password
+            USERS[username]['type'] = type   
+            updateCred()
+            LoadUsers()
+            return redirect("/clients")
+    else:
+        return redirect("/")
+@app.route("/deleteUser",methods=["GET","POST"])
+def delete_user():
+    if sessionCheck():
+        if request.method == "GET":
+            return redirect("/clients")
+        if request.method  == "POST":
+            global USERS
+            username = request.form.get("username")
+            USERS.pop(username)
+            updateCred()
+            LoadUsers()
+            return redirect("/clients")
+    else:
+        return redirect("/")   
+@app.route("/new-user",methods=["POST"])
+def newUser():
+    if sessionCheck():
+        u = currentUser()
+        global USERS
+        if u['type'] == "root":
+          
+            s = {
+                    "username":request.form.get("username"),
+                    "password":request.form.get("password"),
+                    "type":request.form.get("type"),
+                    "last_login":"Hav'nt Logged Yet"
+            }
+            err = ""
+            if s['username'] in USERS:
+                err = err+"username already exists<br>"
+            elif len(s['password']) <8:
+                err =err+"password must be atleast 8 characters<br>"
+            
+            if err == "":
+                USERS[s['username']] = s
+                updateCred()
+                LoadUsers()
+                s = {}
+            f = getUsers()
+
+            return render_template("users.html",title=TITLE,user = currentUser(),noti=err,sess=s,users = f)
+    else:
+        return redirect("/")
 @app.route("/clients",methods=["GET"])
 def clientsDup():
     if sessionCheck():
         u = currentUser()
         if u['type'] == "root":
-            return render_template("users.html")
+            f = getUsers()
+            return render_template("users.html",title=TITLE,user = currentUser(),sess={},users = f)
+        else:
+            return redirect("/profile")
     return redirect("/clients-list")
 @app.route("/client/<id>",methods=["GET"])
 def clientDetail(id):
@@ -254,8 +341,43 @@ def pendingTransactions():
 @app.route("/all-transactions",methods=["GET"])
 def allTransactions():
     if sessionCheck():
-        trans = getTransactions()
-        return render_template("allTransactions.html",title=TITLE,user = currentUser(),noti = None,transactions = trans)
+        args = request.args
+        args = args.to_dict()
+        trans = []
+        fi_from = None
+        fi_to = None
+        if len(args)  >0:
+            if "diff" in args.keys():                
+                start_date = datetime.now() 
+                to_Date = start_date + timedelta(days=-int(args.get("diff")))
+                dts = date_range(to_Date,start_date)
+                t = getTransactions()
+                for i in dts:
+                    for j in t:
+                        k = i.strftime("%d/%m/%Y")
+                        if j['date'] == k:
+                            trans.append(j)
+            elif "from" in args.keys() and "to" in args.keys():
+                f = args.get("from")
+                fi_from = f             
+                f = f.split("-")
+                f = f[2]+"/"+f[1]+"/"+f[0]
+                t = args.get("to")
+                fi_to = t
+                t = t.split("-")
+                t = t[2]+"/"+t[1]+"/"+t[0]
+                fr = getDatefromString(f)
+                to = getDatefromString(t)
+                dts = date_range(fr,to)
+                t = getTransactions()
+                for i in dts:
+                    for j in t:
+                        k = i.strftime("%d/%m/%Y")
+                        if j['date'] == k:
+                            trans.append(j)
+        else:
+            trans = getTransactions() 
+        return render_template("allTransactions.html",title=TITLE,user = currentUser(),fr = fi_from,to=fi_to,noti = None,transactions = trans)
     else:
         return redirect("/")
 
