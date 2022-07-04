@@ -12,8 +12,9 @@ from numerize import numerize
 from rg import ReceiptGenerator
 from vg import VoucherGenerator
 import string
-from pdf import createPdf as pdf
-
+from pdf import createPdf as pdf, createVoucherPdf
+from pdf import createVoucherPdf as pdfVoucher
+from pdf import createTerminalPdf as pdfTerminal
 app = Flask(__name__)
 CORS(app)
 
@@ -172,13 +173,22 @@ def allSites():
 def allTerminals():
     if sessionCheck():
         t = getTerminals()
-        return render_template("terminals.html",title=TITLE,user = currentUser(),noti = None,terminals = t,logs=getLogs())
+        data = []
+        u = currentUser()
+        for i in t:
+            a = [i["TID"],i["site"]["code"],i["site"]["name"],i["config"]["status"],i["config"]["stacker"]]
+            data.append(a)
+        fn  = "t-"+getCurrentTimeStampClean()
+        fileLink = pdfTerminal(data,fn,u["username"])
+
+        return render_template("terminals.html",title=TITLE,user = currentUser(),noti = None,terminals = t,logs=getLogs(),pdfLink = fileLink)
     else:
         return redirect("/")
 
-@app.errorhandler(Exception) 
+'''@app.errorhandler(Exception) 
 def not_found(e):
   return render_template("500.html")
+'''
 @app.errorhandler(404) 
 def not_found1(e):
   return render_template("404.html")
@@ -187,7 +197,14 @@ def not_found1(e):
 def allVouchers():
     if sessionCheck():
         v = getVouchers()
-        return render_template("allVouchers.html",title=TITLE,user = currentUser(),noti = None,vouchers = v)
+        fn = "v-"+getCurrentTimeStampClean()
+        data =[]
+        for i in v:         
+            a = [i["TID"],i["receipt_id"],i["date"],i["time"],i["plan"],i["service"],i["pin"],i["payment"]]
+            data.append(a)
+        o = currentUser()
+        fileLink = createVoucherPdf(data,fn,o['username'])
+        return render_template("allVouchers.html",title=TITLE,user = currentUser(),noti = None,vouchers = v,pdfLink= fileLink)
     else:
         return redirect("/")
 @app.route("/voucherT/<id>",methods=["GET"])
