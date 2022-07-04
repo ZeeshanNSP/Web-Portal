@@ -8,7 +8,7 @@
  */
 // Disable the on-canvas tooltip
 
-const DEBUG = true;
+const DEBUG = false;
 const random = (min, max) => // eslint-disable-next-line no-mixed-operators
 Math.floor(Math.random() * (max - min + 1) + min); // eslint-disable-next-line no-unused-vars
 
@@ -33,13 +33,14 @@ var data = {
     data: []
   }  ]
 };
-const  getData =  ()=>{
-   $.get("./getBandwidth",(res)=>{
-    return {tx:res["tx"],rx:res["rx"]}
+var bd = {tx:Math.abs(Math.random()*2000)+100,rx:Math.abs(Math.random()*1000)+10} 
+
+setInterval(function(){
+  $.get("./getBandwidth",(res)=>{
+    bd =  {tx:res["tx"],rx:res["rx"]}
   })
-  return {tx:Math.abs(Math.random()*1024)+100,rx:Math.abs(Math.random()*512)+10}
-  
-}
+
+},500)
 var config={
   type:"line",
   data,
@@ -51,7 +52,6 @@ var config={
       
         realtime:{
           onRefresh : chart=>{
-            bd =  getData()
             tx = {
               x:Date.now(),y:bd["tx"]
             }

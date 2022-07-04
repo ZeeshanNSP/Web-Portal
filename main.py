@@ -176,9 +176,9 @@ def allTerminals():
     else:
         return redirect("/")
 
-#@app.errorhandler(Exception) 
-#def not_found(e):
-#  return render_template("500.html")
+@app.errorhandler(Exception) 
+def not_found(e):
+  return render_template("500.html")
 @app.errorhandler(404) 
 def not_found1(e):
   return render_template("404.html")
@@ -327,8 +327,8 @@ def recieptDetail(id):
         return redirect("/")
 @app.route("/getBandwidth")
 def getBd():
-    tx = r.randint(9,10000)
-    rx = r.randint(9,10000)
+    tx = r.randint(1,10000)
+    rx = r.randint(1,5000)
     return {"tx":tx,"rx":rx}
 @app.route("/logout",methods = ["GET"])
 def Logout():
@@ -451,7 +451,12 @@ def profile():
 def index():
     if request.method == "GET":
         if sessionCheck():
-            return render_template("index.html",user=currentUser(),title=TITLE,clients = numerize.numerize(50000),sess=numerize.numerize(1024),act_voucher=numerize.numerize(5200),vouchers=numerize.numerize(6000))
+            c = len(getUsers())
+            s = len(getTransactions())
+            v = len(getVouchers())
+            av = len(getTerminals()) 
+            tt = len(getTerminals({"config.status":{"$eq":"on"}}))
+            return render_template("index.html",user=currentUser(),total_terminals = numerize.numerize(av),title=TITLE,clients = numerize.numerize(c),sess=numerize.numerize(s),act_voucher=numerize.numerize(tt),vouchers=numerize.numerize(v))
         else:
             return render_template("login.html",title = TITLE)
     if request.method == "POST":
