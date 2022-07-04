@@ -2,13 +2,13 @@
     "nsp_admin": {
         "username": "nsp_admin",
         "password": "admin",
-        "last_login": "04/07/2022 11:54:22",
+        "last_login": "04/07/2022 12:07:54",
         "type": "root"
     },
     "tech": {
         "username": "tech",
-        "password": "tech1234",
+        "password": "tech",
         "type": "tech",
-        "last_login": "02/07/2022 12:55:25"
+        "last_login": "04/07/2022 12:06:47"
     }
 }

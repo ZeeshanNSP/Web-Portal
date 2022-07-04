@@ -251,8 +251,8 @@ def newUser():
             err = ""
             if s['username'] in USERS:
                 err = err+"username already exists<br>"
-            elif len(s['password']) <8:
-                err =err+"password must be atleast 8 characters<br>"
+            elif len(s['password']) <4:
+                err =err+"password must be atleast 4 characters<br>"
             
             if err == "":
                 USERS[s['username']] = s
