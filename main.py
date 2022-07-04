@@ -338,8 +338,51 @@ def Logout():
 @app.route("/pending-transactions",methods=["GET"])
 def pendingTransactions():
     if sessionCheck():
-        trans = getTransactions({"pending_amount":{"$gt":"0"}})
-        return render_template("pendingTransactions.html",title=TITLE,user = currentUser(),noti = None,transactions = trans)
+        args = request.args
+        args = args.to_dict()
+        trans = []
+        fi_from = None
+        fi_to = None
+        if len(args)  >0:
+            if "diff" in args.keys():                
+                start_date = datetime.now() 
+                to_Date = start_date + timedelta(days=-int(args.get("diff")))
+                dts = date_range(to_Date,start_date)
+                t = getTransactions({"pending_amount":{"$gt":"0"}})
+                for i in dts:
+                    for j in t:
+                        k = i.strftime("%d/%m/%Y")
+                        if j['date'] == k:
+                            trans.append(j)
+            elif "from" in args.keys() and "to" in args.keys():
+                f = args.get("from")
+                fi_from = f             
+                f = f.split("-")
+                f = f[2]+"/"+f[1]+"/"+f[0]
+                t = args.get("to")
+                fi_to = t
+                t = t.split("-")
+                t = t[2]+"/"+t[1]+"/"+t[0]
+                fr = getDatefromString(f)
+                to = getDatefromString(t)
+                dts = date_range(fr,to)
+                t = getTransactions({"pending_amount":{"$gt":"0"}})
+                for i in dts:
+                    for j in t:
+                        k = i.strftime("%d/%m/%Y")
+                        if j['date'] == k:
+                            trans.append(j)
+        else:
+            trans = getTransactions({"pending_amount":{"$gt":"0"}})     
+        fileLink = "P-"+getCurrentTimeStampClean()
+        data =[]
+        #headers = [['TID','Reciept #','Date','Time','Service','User','Amount','Pending']]
+        for i in trans:
+            a = [i["TID"],i["receipt_id"],i["date"],i["time"],i["service"],i["phone"],i["total_payment"],i["pending_amount"]]
+            data.append(a)
+        u = currentUser()
+        fileLink = pdf(data,fileName=fileLink,user = u["username"])
+        return render_template("pendingTransactions.html",title=TITLE,user = currentUser(),fr = fi_from,to=fi_to,noti = None,transactions = trans,pdfLink = fileLink)
     else:
         return redirect("/")  
 @app.route("/all-transactions",methods=["GET"])
