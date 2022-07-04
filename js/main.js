@@ -35,12 +35,8 @@ var data = {
 };
 var bd = {tx:Math.abs(Math.random()*2000)+100,rx:Math.abs(Math.random()*1000)+10} 
 
-setInterval(function(){
-  $.get("./getBandwidth",(res)=>{
-    bd =  {tx:res["tx"],rx:res["rx"]}
-  })
 
-},500)
+
 var config={
   type:"line",
   data,
@@ -76,6 +72,18 @@ if(!DEBUG)
   document.addEventListener('contextmenu', event => event.preventDefault());
 
 const myLineChart = new Chart(document.getElementById("main-chart"),config);
+
+_url  =window.location.href.split("/")
+_u = _url[_url.length-1]
+if(_u.trim().length  == 0 || _u == "" || _u == " "){
+  setInterval(function(){
+    $.get("./getBandwidth",(res)=>{
+      bd =  {tx:res["tx"],rx:res["rx"]}
+    })
+  
+  },500)
+}
+
 
 
 
