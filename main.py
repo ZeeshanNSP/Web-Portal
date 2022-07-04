@@ -42,7 +42,7 @@ def sessionCheck():
 def getCurrentTimeStampClean():
     from datetime import date
     now = datetime.now()
-    d1 =  now.strftime("%d%m%Y")
+    d1 =  now.strftime("%d%m%Y%H%M%S")
     return str(d1)
 def getCurrentDate():
     from datetime import date
