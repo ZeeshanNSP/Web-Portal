@@ -12,8 +12,7 @@ from numerize import numerize
 from rg import ReceiptGenerator
 from vg import VoucherGenerator
 import string
-
-
+from pdf import createPdf as pdf
 
 app = Flask(__name__)
 CORS(app)
@@ -40,6 +39,11 @@ def sessionCheck():
             return False
     except:
         return False
+def getCurrentTimeStampClean():
+    from datetime import date
+    now = datetime.now()
+    d1 =  now.strftime("%d%m%Y")
+    return str(d1)
 def getCurrentDate():
     from datetime import date
     now = datetime.now()
@@ -377,7 +381,17 @@ def allTransactions():
                             trans.append(j)
         else:
             trans = getTransactions() 
-        return render_template("allTransactions.html",title=TITLE,user = currentUser(),fr = fi_from,to=fi_to,noti = None,transactions = trans)
+
+        
+        fileLink = getCurrentTimeStampClean()
+        data =[]
+        #headers = [['TID','Reciept #','Date','Time','Service','User','Amount','Pending']]
+        for i in trans:
+            a = [i["TID"],i["receipt_id"],i["date"],i["time"],i["service"],i["phone"],i["total_payment"],i["pending_amount"]]
+            data.append(a)
+        u = currentUser()
+        fileLink = pdf(data,fileName=fileLink,user = u["username"])
+        return render_template("allTransactions.html",title=TITLE,user = currentUser(),fr = fi_from,to=fi_to,noti = None,transactions = trans,pdfLink = fileLink)
     else:
         return redirect("/")
 
