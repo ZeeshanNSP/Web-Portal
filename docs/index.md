@@ -30,6 +30,7 @@
 - Profiles
   - Showing the Profile of the logged in user
   - Root user can view the list of generated pdfs with the type of report
+
 ### User Types
 - root [have all rights]
 - tech [only view terminal detail and settings]
