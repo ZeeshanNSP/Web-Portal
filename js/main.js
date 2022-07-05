@@ -83,7 +83,7 @@ if(_u.trim().length  == 0 || _u == "" || _u == " "){
   
   },500)
 }
-
+console.log("%cNONSTOP PAYMENTS PROVIDERS LLC!", "color:red;font-size:xx-large;font-weight:bold;")
 
 
 
