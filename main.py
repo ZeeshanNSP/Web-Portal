@@ -353,7 +353,6 @@ def Logout():
     if sessionCheck():
         session.pop("user")
     return redirect("/")   
-
 @app.route("/pending-transactions",methods=["GET"])
 def pendingTransactions():
     if sessionCheck():
