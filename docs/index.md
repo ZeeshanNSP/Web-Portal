@@ -4,7 +4,6 @@
 
 ### Operations
 
-
 - Authentication
   - Login
   - Error Handling
@@ -32,6 +31,7 @@
   - Root user can view the list of generated pdfs with the type of report
 
 ### User Types
+
 - root [have all rights]
 - tech [only view terminal detail and settings]
 
