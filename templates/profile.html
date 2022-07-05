@@ -219,6 +219,27 @@
             <i>{{user['last_login']}}</i>
             </p>
           </div>
+          {% if "root" in user['type'] %}
+          <div class="row p-4 justify-content-between text-center">
+            <h3 class=" text-info">All Pdfs Generated</h3>
+            <div style="overflow:auto !important;max-height: 40vh;height:40vh;">
+                <table class="stripe table border ">
+                  <tr>
+                    <th class="fw-bold text-dark">File</th>
+                    <th class="fw-bold text-dark">Type</th>
+                  </tr>
+                  {% for file in files %}
+                    <tr>
+                      <td><a href="{{file['link']}}" class="text-info fw-bold text-decoration-none" target="_blank">{{file["name"]}}</a></td>
+                      <td>{{file["type"]}}</td>
+                    </tr>
+                  {%endfor%}
+                </table>
+            </div>
+
+          </div>
+          {%endif%}
+
           <!-- /.row-->
     
           <!-- /.card.mb-4-->

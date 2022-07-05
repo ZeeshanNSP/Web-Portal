@@ -1,3 +1,4 @@
+from distutils import filelist
 import json
 import sys
 import time
@@ -459,7 +460,28 @@ def allTransactions():
 def profile():
     if sessionCheck():
         if request.method =="GET":
-            return render_template("profile.html",title = TITLE,user = currentUser(),noti = None)
+            u = currentUser()
+            if u['type'] == "root":
+                fileList = os.listdir("./assets/pdf/")
+                fl = []
+                types = {
+                    "v":"Voucher",
+                    "t":"Terminal"
+                }
+                for i in fileList:
+                    ft = i[0]
+                    a = {}
+                    if ft in types:
+                        a["type"] = types[ft]
+                    else:
+                        a["type"] = "Transaction"
+                    a["link"] = "/assets/pdf/"+i
+                    a["name"] = i
+                    fl.append(a)    
+                    
+                return render_template("profile.html",title = TITLE,user = u,noti = None,files=fl)
+            else:
+                return render_template("profile.html",title = TITLE,user = u,noti = None,files=None)
         else:
             return  render_template("profile.html",title= TITLE,user = currentUser(),noti = "Updated Successfully")
     else:

@@ -33,7 +33,7 @@ def createPdf(data,fileName,user =None):
     pdf.ln(0.3)
     pdf.set_text_color(128,128,128)
     pdf.set_font('Times','B',15.0) 
-    pdf.cell(epw, 0.0, 'Tranactions Summary', align='C')
+    pdf.cell(epw, 0.0, 'Transactions Summary', align='C')
     pdf.set_font('Times','',10.0) 
     pdf.ln(1)
     pdf.set_text_color(0,0,0)
@@ -51,12 +51,13 @@ def createPdf(data,fileName,user =None):
         pdf.set_font('Times','',10.0) 
         pdf.set_text_color(0,0,0)
         pdf.ln(0.2)
-        
+       
     # Text height is the same as current font size
     th = pdf.font_size
     headers = [['TID','Reciept #','Date','Time','Service','User','Amount','Pending']]
     for row in headers:
         for datum in row:
+            
             if datum == row[0]:
                 pdf.set_font('Times','B',10) 
                 pdf.cell(col_width+0.2, 2*th, str(datum), border=1,align='C')
@@ -71,9 +72,14 @@ def createPdf(data,fileName,user =None):
     tpt = 0
     for row in data:
         for i in row:
+            pdf.set_text_color(0,0,0)
             if i == row[0]:
                 pdf.set_font('Times','I',8.1)        
                 pdf.cell(col_width+0.2, 2*th, str(i), border=1,align='C')
+            elif i == row[4]:
+                pdf.set_font('Times','',10) 
+                pdf.set_text_color(0,100,0)
+                pdf.cell(col_width, 2*th, str(i), border=1,align='C')
             else:
                 pdf.set_font('Times','',10) 
                 pdf.cell(col_width, 2*th, str(i), border=1,align='C')
