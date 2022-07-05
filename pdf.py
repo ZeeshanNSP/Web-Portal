@@ -1,3 +1,5 @@
+SERVER_URL = "https://0d2c-5-195-250-105.in.ngrok.io"
+
 def createPdf(data,fileName,user =None):
     # Import FPDF class
     from ctypes import alignment
@@ -22,9 +24,11 @@ def createPdf(data,fileName,user =None):
     # Since we do not need to draw lines anymore, there is no need to separate
     # headers from data matrix.
     
-
+    
     pdf.image("./assets/img/nsp-logo-full.jpeg", x = None, y =None, w = 2, h = 1)
-
+    from qr import QR
+    QR(SERVER_URL+"/assets/pdf/"+fileName+".pdf")
+    pdf.image("./assets/img/qr.png",x=7,y=2,w=1,h=1)
     # Document title centered, 'B'old, 14 pt
     pdf.set_font('Times','B',18.0) 
     pdf.set_text_color(200,10,10)
@@ -141,7 +145,9 @@ def createVoucherPdf(data,fileName,user =None):
     
 
     pdf.image("./assets/img/nsp-logo-full.jpeg", x = None, y =None, w = 2, h = 1)
-
+    from qr import QR
+    QR(SERVER_URL+"/assets/pdf/"+fileName+".pdf")
+    pdf.image("./assets/img/qr.png",x=7,y=2,w=1,h=1)
     # Document title centered, 'B'old, 14 pt
     pdf.set_font('Times','B',18.0) 
     pdf.set_text_color(200,10,10)
@@ -243,7 +249,9 @@ def createTerminalPdf(data,fileName,user =None):
     
 
     pdf.image("./assets/img/nsp-logo-full.jpeg", x = None, y =None, w = 2, h = 1)
-
+    from qr import QR
+    QR(SERVER_URL+"/assets/pdf/"+fileName+".pdf")
+    pdf.image("./assets/img/qr.png",x=7,y=2,w=1,h=1)
     # Document title centered, 'B'old, 14 pt
     pdf.set_font('Times','B',18.0) 
     pdf.set_text_color(200,10,10)
