@@ -350,7 +350,8 @@ def getBd():
     return {"tx":tx,"rx":rx}
 @app.route("/logout",methods = ["GET"])
 def Logout():
-    session.pop("user")
+    if sessionCheck():
+        session.pop("user")
     return redirect("/")   
 
 @app.route("/pending-transactions",methods=["GET"])
